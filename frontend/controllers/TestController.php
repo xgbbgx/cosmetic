@@ -37,6 +37,7 @@ class TestController extends Controller
     public function actionIndex(){
         $lefeng=SpiderInfo::lefeng();
         print_r($lefeng);
+		echo 123;
         return $this->render('index');
     }
     public function actionA(){
