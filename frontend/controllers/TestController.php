@@ -4,7 +4,7 @@ namespace frontend\controllers;
 use Yii;
 use common\core\frontend\Controller;
 use common\services\SpeechService;
-
+use common\components\spider\SpiderInfo;
 /**
  * Site controller
  */
@@ -35,9 +35,17 @@ class TestController extends Controller
         exit;
     }
     public function actionIndex(){
+        $lefeng=SpiderInfo::lefeng();
+        print_r($lefeng);
         return $this->render('index');
     }
     public function actionA(){
+        $file=Yii::getAlias('@data-file/uploads/speech') .'/123.wav';
+        $content='小优您好我要找粉红色的外套和黑色的长裤子';
+        $res=SpeechService::baiduSynthesis(['0'=>$content], $file,['tex'=>$content,'spd'=>'3']);
+        //$res=SpliteService::vicword($content);
+        print_r($res);
+        exit;
         $file=dirname(__FILE__).'/../web/wav/1522138979-208034-271191.wav';
         $data=SpeechService::baiduAsr($file);
         //$res=SpliteService::getPhpanalysisKeywords($data['result'][0]);

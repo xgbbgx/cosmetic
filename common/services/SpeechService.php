@@ -42,7 +42,7 @@ class SpeechService{
      */
     public static function baiduSynthesis($content,$file,$option=[]){
        $client=self::baiduClient();
-       $result = $client->synthesis($content, 'zh', 1,$content);
+       $result = $client->synthesis($content, 'zh', 1,$option);
        
        // 识别正确返回语音二进制 错误则返回json 参照下面错误码
        if(!is_array($result)){
