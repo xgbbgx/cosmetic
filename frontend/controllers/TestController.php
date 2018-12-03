@@ -5,6 +5,7 @@ use Yii;
 use common\core\frontend\Controller;
 use common\services\SpeechService;
 use common\components\spider\SpiderInfo;
+use common\services\aliyun\AliSpeechInfo;
 /**
  * Site controller
  */
@@ -35,9 +36,15 @@ class TestController extends Controller
         exit;
     }
     public function actionIndex(){
-        $lefeng=SpiderInfo::lefeng();
+        /**$lefeng=SpiderInfo::lefeng();
         print_r($lefeng);
-		echo 123;
+		echo 123;*/
+        $file=Yii::getAlias('@data-file/uploads/speech').'/445.wav';
+        //AliSpeechInfo::Synthesis('我喜欢你阿红',$file);
+
+        $res=AliSpeechInfo::speechArc($file);
+        print_r($res);
+        exit;
         return $this->render('index');
     }
     public function actionA(){
