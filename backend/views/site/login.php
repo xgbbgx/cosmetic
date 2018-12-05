@@ -12,24 +12,18 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
+	<?php $form = ActiveForm::begin(['id' => 'login-form','options'=>['class'=>'form-vertical login-form']]); ?>
+		<div class="control-group">
+		<?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+		</div>
+		<div class="control-group">
+		<?= $form->field($model, 'password')->passwordInput() ?>
+		</div>
+		<div class="form-actions">
+			<?= $form->field($model, 'rememberMe')->checkbox(['style'=>'margin-left:0px;']) ?>
+			<?= Html::submitButton('登陆', ['class' => 'btn green pull-right', 'name' => 'login-button']) ?>
+		</div>
 
-    <p>Please fill out the following fields to login:</p>
+	<?php ActiveForm::end(); ?>
 
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-                <?= $form->field($model, 'password')->passwordInput() ?>
-
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
-        </div>
-    </div>
 </div>

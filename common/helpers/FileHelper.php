@@ -65,4 +65,8 @@ class FileHelper{
         $tmp = explode('.',$file);
         return end($tmp);
     }
+    
+    public static function putFile(){
+        
+    }
 }
