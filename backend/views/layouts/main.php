@@ -5,6 +5,7 @@
 
 use backend\assets\AppAsset;
 use yii\helpers\Html;
+use yii\widgets\Breadcrumbs;
 
 AppAsset::register($this);
 AppAsset::addCss($this,'@web/css/adm.css');
@@ -31,6 +32,16 @@ AppAsset::addCss($this,'@web/css/adm.css');
 		<div class="page-content">
 			<div class="container-fluid">
 			<div class="space20"></div>
+			<?= Breadcrumbs::widget([  
+			    'homeLink'=>[
+			        'label' => '<i class="icon-home"></i>' . Html::encode(Yii::t('yii', 'Home')),
+			        'url' => Yii::$app->homeUrl,
+			        'encode' => false,
+			     ],
+                'itemTemplate'=>"<li>{link}<i class=\"icon-angle-right\"></i></li>",
+                'activeItemTemplate'=>"<span>{link}</span>",
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            ]) ?>
 			<?php echo $content;?>
 			</div>
 		</div>

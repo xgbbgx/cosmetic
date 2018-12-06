@@ -35,11 +35,13 @@ class Brand extends \common\core\common\ActiveRecord
     public function rules()
     {
         return [
+            [['name', 'type'], 'required'],
+            ['type','in','range'=>['101','102','103']],
             [['type', 'created_at', 'created_by', 'updated_at', 'updated_by', 'datafix'], 'integer'],
             [['name'], 'string', 'max' => 50],
             [['name_en', 'name_py'], 'string', 'max' => 100],
             [['logo'], 'string', 'max' => 500],
-            [['name','type'], 'unique', 'targetAttribute' => ['name', 'type']],
+            [['name','type'], 'unique', 'targetAttribute' => ['name', 'type']]
         ];
     }
 

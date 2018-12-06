@@ -11,6 +11,7 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
+    public $verifyCode;
     public $rememberMe = true;
 
     private $_user;
@@ -28,9 +29,21 @@ class LoginForm extends Model
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            ['verifyCode', 'captcha', 'captchaAction' => '/site/captcha', 'message' => Yii::t('error', '20101')],
         ];
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'username' => '用户名',
+            'password' => '密码',
+            'verifyCode' => '验证码',
+            'rememberMe' => '记住我',
+        ];
+    }
     /**
      * Validates the password.
      * This method serves as the inline validation for password.

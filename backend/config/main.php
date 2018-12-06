@@ -95,6 +95,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'uploads/<p:[0-9a-zA-Z._\-\/]+>'=>'public/uploads',
             ],
         ],
     ],
