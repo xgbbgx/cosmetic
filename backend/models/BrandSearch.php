@@ -39,7 +39,7 @@ class BrandSearch extends Brand
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search1($params)
     {
         $query = Brand::find();
 

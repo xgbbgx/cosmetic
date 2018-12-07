@@ -10,6 +10,9 @@ use yii\filters\VerbFilter;
 use common\core\backend\Controller;
 use backend\models\BrandSearch;
 use yii\grid\GridView;
+use common\helpers\UtilHelper;
+use yii\helpers\Html;
+use yii\grid\ActionColumn;
 
 /**
  * ClassifyController implements the CRUD actions for Brand model.
@@ -37,25 +40,47 @@ class ClassifyController extends Controller
      */
     public function actionIndex()
     {
-        /**$dataProvider = new ActiveDataProvider([
-            'query' => Brand::find()->where(['datafix'=>Brand::DATAFIX]),
-        ]);*/
-        
-        $searchModel = new BrandSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        //print_r($dataProvider->getModels());
-       // exit;
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->render('index');
     }
     public function actionList(){
-        $searchModel = new BrandSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        print_r($dataProvider->getModels());
+        $sEcho= empty($_GET['sEcho']) ? 0:intval($_GET['sEcho']);
+        $colums=array("id","","name","name_en",'name_py');
+        $arr=UtilHelper::getDataTablesParams($_GET,$colums);
+        $output = array(
+            "sEcho" => $sEcho,
+            "iTotalRecords" => 1,
+            "iTotalDisplayRecords" => 1,
+            "aaData" => array()
+        );
+        $iData=Brand::search($arr);
+        $totalNum=empty($iData['totalNum']) ?0:$iData['totalNum'];
+        $output['iTotalRecords']=$totalNum;
+        $output['iTotalDisplayRecords']=$totalNum;
+        if($totalNum){
+            $brandType=Yii::$app->params['classify_conf']['brand_type'];
+            $iList=empty($iData['list']) ?[]:$iData['list'];
+            foreach($iList as $k=>$i){
+                $id=$i['id'];
+                $img='<img style="width:80px;" src="'.$i['logo'].'">';
+                $action='
+                <a  href="/classify/view?id='.$id.'"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp;
+                <a  href="/classify/update?id='.$id.'"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;
+                <a href="javascript:void(0);" onclick="delBlog(\''.$id.'\',\''.Html::encode($i['name']).'\',this)">
+                <i class="glyphicon glyphicon-trash"></i></a>';
+                $aaData=array($id,
+                    $img,
+                    Html::encode($i['name']),
+                    Html::encode($i['name_en']),
+                    Html::encode($i['name_py']),
+                    empty($brandType[$i['type']]) ? '':$brandType[$i['type']],
+                    $action);
+                $output['aaData'][]=$aaData;
+            }
+        }
+        echo json_encode($output);
         exit;
     }
+    
     /**
      * Displays a single Brand model.
      * @param integer $id

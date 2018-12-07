@@ -3,6 +3,7 @@
 namespace common\models\category;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "{{%brand}}".
@@ -64,7 +65,23 @@ class Brand extends \common\core\common\ActiveRecord
             'datafix' => 'Datafix',
         ];
     }
-    public static function inBrand(){
-        
+    
+    public static function search($arr){
+        $data=[];
+        $order=empty($arr['sOrder']) ? ' order by id ':$arr['sOrder'];
+        $where = '';
+        if(isset($arr['sWhere']) && $arr['sWhere']){
+            $where=$arr['sWhere'].' and datafix= '.self::DATAFIX;
+        }else{
+            $where=' where datafix= '.self::DATAFIX;
+        }
+        $totalNum=self::findBySql('select count(*) from '.self::tableName().' '.$where)->scalar();
+        if($totalNum){
+            $sql='select id,name,name_en,name_py,logo,type from '.
+                self::tableName().' '.$where.' '.$order.' '.@$arr['sLimit'];;
+            $data['list']=self::findBySql($sql)->asArray()->all();
+        }
+        $data['totalNum']=empty($totalNum) ?0:$totalNum;
+       return $data;
     }
 }
