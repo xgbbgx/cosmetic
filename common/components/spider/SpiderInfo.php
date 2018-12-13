@@ -54,31 +54,17 @@ class SpiderInfo{
             }
             return $tree;
            // print_r($tree);
-            /** $conn=Yii::$app->db;
-            foreach ($tree as $k1=>$te1){
-                $sql='insert into iq_product_tag(name,type) values("'.$k1.'",101)';
-                $conn->createCommand($sql)->execute();
-                $id1=$conn->lastInsertID;
-                foreach ($te1 as $k2=>$te2){
-                    $sql='insert into iq_product_tag(name,type) values("'.$k2.'",102)';
-                    $conn->createCommand($sql)->execute();
-                    $id2=$conn->lastInsertID;
-                    $sql="insert into iq_tag_r(parent_id,child_id) values($id1,$id2)";
-                    $conn->createCommand($sql)->execute();
-                    foreach ($te2 as $k3=>$te3){
-                        $sql='insert into iq_product_tag(name,type) values("'.$te3.'",103)';
-                        $conn->createCommand($sql)->execute();
-                        $id3=$conn->lastInsertID;
-                        $sql="insert into iq_tag_r(parent_id,child_id) values($id2,$id3)";
-                        $conn->createCommand($sql)->execute();
+            /**  $lefeng=SpiderInfo::lefeng();
+            if($lefeng){
+                foreach ($lefeng as $key=>$le){
+                    Category::initCategoryLevel($key,'',1);
+                    foreach ($le as $k1=>$le1){
+                        Category::initCategoryLevel($k1,$key,2);
+                        foreach ($le1 as $le2){
+                            Category::initCategoryLevel($le2,$k1,3);
+                        }
                     }
                 }
-            }
-            if(preg_match('/<div class="title">([\d\D]*?)<\/div>/i',$data,$title_arr)){
-                
-            }
-            if(preg_match('/<td[\d\D]*?>([\d\D]*?)<\/td>/i',$data,$content_arr)){
-                
             }*/
             
         }

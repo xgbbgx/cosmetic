@@ -9,6 +9,7 @@ use common\services\aliyun\AliSpeechInfo;
 use common\models\category\CategoryLevel;
 use common\helpers\Pinyin;
 use common\models\category\Brand;
+use common\models\category\Category;
 /**
  * Site controller
  */
@@ -19,7 +20,8 @@ class TestController extends Controller
         $this->enableCsrfValidation = false;
     }
     public function TestController(){
-        $fileDir=Yii::getAlias('@data-file/uploads/speech') ;
+        //$fileDir=Yii::getAlias('@data-file/uploads/speech') ;
+        
     }
     public function actionUpload(){
         if ($_FILES["file"]["error"] > 0){
@@ -39,6 +41,9 @@ class TestController extends Controller
         exit;
     }
     public function actionIndex(){
+       $tree=Category::loadCategoryTree();
+       print_r($tree);
+       exit;
         /**
          *
        

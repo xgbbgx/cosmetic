@@ -13,6 +13,8 @@ use yii\grid\GridView;
 use common\helpers\UtilHelper;
 use yii\helpers\Html;
 use yii\grid\ActionColumn;
+use common\models\category\CategoryLevel;
+use common\models\category\Category;
 
 /**
  * ClassifyController implements the CRUD actions for Brand model.
@@ -161,5 +163,29 @@ class ClassifyController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    
+    
+    public function actionCategoryList(){
+        $tree=Category::loadCategoryTree();
+        $data['tree']=$tree;
+        return $this->render('category_list',$data);
+    }
+    
+    public function actionCategory(){
+        $id=Yii::$app->request->get('id');
+        if($id){
+            $model = Category::findOne($id);
+        }
+        if(empty($model)){
+            $model=new Category();
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+        
+        return $this->render('category', [
+            'model' => $model,
+        ]);
     }
 }

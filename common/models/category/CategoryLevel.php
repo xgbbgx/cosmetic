@@ -49,6 +49,45 @@ class CategoryLevel extends \common\core\common\ActiveRecord
             'datafix' => 'Datafix',
         ];
     }
+    public static function loadCategoryLevel(){
+        $classLevelObjs=self::getAll('id,c_category_id,p_category_id',['datafix'=>self::DATAFIX]);
+        if($classLevelObjs){
+            $classLevel=[];
+            foreach ($classLevelObjs as $l){
+                $classLevel[$l['p_category_id']][]=$l['c_category_id'];
+            }
+            $tree=[];
+            if($classLevel){
+                foreach ($classLevel[0] as $l){
+                    if (isset($classLevel[$l]) && $classLevel[$l]){
+                        $tree[$l]=[];
+                    }
+                }
+                foreach ($tree as $k=>$a){
+                    if(isset($classLevel[$k]) && $classLevel[$k]){
+                        foreach ($classLevel[$k] as $ll){
+                            $tree[$k][$ll]=[];
+                        }
+                    }
+                }
+                foreach ($tree as $k=>$a){
+                    foreach ($a as $k1=>$a1){
+                        if(isset($classLevel[$k1]) && $classLevel[$k1]){
+                            foreach ($classLevel[$k1] as $ll){
+                                $tree[$k][$k1][]=$ll;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $tree;
+    }
+    /**
+     * 
+     * @param unknown $cCategoryName
+     * @param string $pCategoryName
+     */
     public static function inCategoryLevelByName($cCategoryName,$pCategoryName=''){
         $py = new Pinyin();
         $tr = Yii::$app->db->beginTransaction();
