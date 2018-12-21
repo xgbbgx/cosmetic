@@ -6,22 +6,30 @@ use yii\helpers\Html;
 /* @var $model common\models\category\Category */
 
 if($model->name){
-	$this->title = 'Update Category: ' . $model->name;
-	$this->params['breadcrumbs'][] = ['label' => 'Categorys', 'url' => ['index']];
-	$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
+	$this->title = '分类: ' . $model->name;
+	$this->params['breadcrumbs'][] = ['label' => '分类', 'url' => ['/classify/category-list']];
+	$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['/classify/category-view', 'id' => $model->id]];
 	$this->params['breadcrumbs'][] = 'Update';
 }else{
-	$this->title = 'Create Category';
-	$this->params['breadcrumbs'][] = ['label' => 'Categorys', 'url' => ['index']];
+	$this->title = '分类';
+	$this->params['breadcrumbs'][] = ['label' => '分类', 'url' => ['/classify/category-list']];
 	$this->params['breadcrumbs'][] = $this->title;
 }
 ?>
-<div class="Category-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_category_form', [
-        'model' => $model,
-    ]) ?>
-
+<div class="portlet box blue">
+	<div class="portlet-title">
+		<div class="caption"><i class="icon-reorder"></i><?= Html::encode($this->title) ?></div>
+		<div class="tools">
+			<a href="javascript:;" class="collapse"></a>
+			<a href="#portlet-config" data-toggle="modal" class="config"></a>
+			<a href="javascript:;" class="reload"></a>
+			<a href="javascript:;" class="remove"></a>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		<h3 class="block"><?= Html::encode($this->title) ?></h3>
+        <?= $this->render('_category_form', [
+            'model' => $model,
+        ]) ?>
+	</div>
 </div>

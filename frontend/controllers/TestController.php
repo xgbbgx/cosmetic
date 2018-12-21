@@ -41,11 +41,11 @@ class TestController extends Controller
         exit;
     }
     public function actionIndex(){
-       $tree=Category::loadCategoryTree();
+        /**
+         *$tree=Category::loadCategoryTree();
        print_r($tree);
        exit;
-        /**
-         *
+        
        
         $file=Yii::getAlias('@data-file/uploads/speech').'/445.wav';
         //AliSpeechInfo::Synthesis('我喜欢你阿红',$file);

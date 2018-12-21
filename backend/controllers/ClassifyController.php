@@ -171,7 +171,37 @@ class ClassifyController extends Controller
         $data['tree']=$tree;
         return $this->render('category_list',$data);
     }
-    
+    public function actionGetCategoryList(){
+        $sEcho= empty($_GET['sEcho']) ? 0:intval($_GET['sEcho']);
+        $colums=array("","t3.name1","t3.name2",'t4.name');
+        $arr=UtilHelper::getDataTablesParams($_GET,$colums);
+        
+        $output = array(
+            "sEcho" => $sEcho,
+            "iTotalRecords" => 1,
+            "iTotalDisplayRecords" => 1,
+            "aaData" => array()
+        );
+        
+        $totalNum=Category::loadCategoryNumByArr($arr);
+        $output['iTotalRecords']=$totalNum;
+        $output['iTotalDisplayRecords']=$totalNum;
+        if($totalNum){
+            $iList=Category::loadCategoryByArr($arr);
+            $a=1;
+            foreach($iList as $k=>$i){
+                $province='<a href="/classify/category?id='.$i['cid1'].'">'.$i['name1'].'</a>';
+                $city='<a href="/classify/category?id='.$i['cid2'].'">'.$i['name2'].'</a>';
+                $district='<a href="/classify/category?id='.$i['cid3'].'">'.$i['name3'].'</a>';
+                $actions='';
+                $aaData=array($a,$province,$city,$district,$actions);
+                $output['aaData'][]=$aaData;
+                $a++;
+            }
+        }
+        echo json_encode($output);
+        exit;
+    }
     public function actionCategory(){
         $id=Yii::$app->request->get('id');
         if($id){
@@ -181,11 +211,46 @@ class ClassifyController extends Controller
             $model=new Category();
         }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['/classify/category', 'id' => $model->id]);
         }
         
         return $this->render('category', [
             'model' => $model,
         ]);
+    }
+    public function actionCategoryView(){
+        $id=Yii::$app->request->get('id');
+        $model = Category::findOne($id);
+        return $this->render('category_view', [
+            'model' => $model,
+        ]);
+    }
+    public function actionCategoryDel($id)
+    {
+        $id=Yii::$app->request->get('id');
+        $model = Category::findOne($id);
+        $model->datafix=$model::DATAFIX_DELETE;
+        $model->save();
+        return $this->redirect(['/classify/category-list']);
+    }
+    /**
+     * Function output the site that you selected.
+     * @param int $pid
+     * @param int $typeid
+     */
+    public function actionSite($pid, $id = 0)
+    {
+        $model = new Category();
+        $model = $model->getCategoryList($pid);
+        
+        $aa="--请选择分类--";
+        
+        echo Html::tag('option',$aa, ['value'=>'empty']) ;
+        
+        foreach($model as $value=>$name)
+        {
+            if($id==$value){}else
+            echo Html::tag('option',Html::encode($name),array('value'=>$value));
+        }
     }
 }

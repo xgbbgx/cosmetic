@@ -5,6 +5,7 @@ namespace common\models\category;
 use Yii;
 use yii\db\Exception;
 use common\helpers\Pinyin;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%category}}".
@@ -15,6 +16,7 @@ use common\helpers\Pinyin;
  * @property string $name_py 名称拼音
  * @property int $parent_id 父类id
  * @property int $weight 权重
+ * @property int $level 级别1为1级
  * @property int $type 类别
  * @property int $created_at
  * @property int $created_by
@@ -38,9 +40,11 @@ class Category extends \common\core\common\ActiveRecord
     public function rules()
     {
         return [
-            [['type','parent_id','weight', 'created_at', 'created_by', 'updated_at', 'updated_by', 'datafix'], 'integer'],
+            [['level','type','parent_id','weight', 'created_at', 'created_by', 'updated_at', 'updated_by', 'datafix'], 'integer'],
             [['name'], 'string', 'max' => 50],
             [['name_en', 'name_py'], 'string', 'max' => 100],
+            [['type','parent_id'], 'default', 'value' => '0'],
+            [['level'], 'default', 'value' => '1'],
             [['name','type'], 'unique', 'targetAttribute' => ['name', 'type']]
         ];
     }
@@ -57,6 +61,7 @@ class Category extends \common\core\common\ActiveRecord
             'name_py' => 'Name Py',
             'parent_id' => 'Parent ID',
             'weight' => 'Weight',
+            'level' => 'Level',
             'type' => 'Type',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
@@ -65,14 +70,14 @@ class Category extends \common\core\common\ActiveRecord
             'datafix' => 'Datafix',
         ];
     }
-    public static function initCategoryLevel($cCategoryName,$pCategoryName='',$type=1){
+    public static function initCategoryLevel($cCategoryName,$pCategoryName='',$level=1){
         $py = new Pinyin();
         $tr = Yii::$app->db->beginTransaction();
         try {
             $pCategoryId=0;
             if($pCategoryName){
-                $pType=$type-1;
-                $pCategory=Category::findOne(['name'=>$pCategoryName,'type'=>$pType]);
+                $pLevel=$level-1;
+                $pCategory=Category::findOne(['name'=>$pCategoryName,'type'=>$pLevel]);
                 $pCategoryId=$pCategory->id;
             }
             
@@ -81,7 +86,7 @@ class Category extends \common\core\common\ActiveRecord
                 $cCategory=new Category();
                 $cCategory->name=$cCategoryName;
                 $cCategory->name_py=$py->getpy($cCategoryName,true);
-                $cCategory->type=$type;
+                $cCategory->level=$level;
                 $cCategory->parent_id=$pCategoryId;
                 if(!$cCategory->save()){
                     print_r($cCategory->errors);
@@ -101,8 +106,33 @@ class Category extends \common\core\common\ActiveRecord
         }
     }
     
+    public static function loadCategoryNumByArr($arr){
+        $where = '';
+        if(isset($arr['sWhere']) && $arr['sWhere']){
+            $where=$arr['sWhere'];
+        }
+        return self::findBySql('select count(*) from
+(select t1.id cid1,t1.name name1,t1.parent_id pid1,t2.id cid2,t2.name name2,t2.parent_id pid2
+from t_category t1 left join t_category t2 on t1.id=t2.parent_id where t1.parent_id=0 and t1.datafix=0 and t2.datafix=0) t3
+left join t_category t4 on t3.cid2=t4.parent_id and t4.datafix=0 '.$where)->scalar();
+    }
+    public static function loadCategoryByArr($arr){
+        $order=empty($arr['sOrder']) ? '  ':$arr['sOrder'];
+        $where = '';
+        if(isset($arr['sWhere']) && $arr['sWhere']){
+            $where=$arr['sWhere'];
+        }
+        $sql='select t3.cid1,t3.name1,t3.cid2 ,t3.name2 ,t4.id as cid3,
+t4.name as name3 from
+(select t1.id cid1,t1.name name1,t1.parent_id pid1,t2.id cid2,t2.name name2,t2.parent_id pid2
+from t_category t1 left join t_category t2 on t1.id=t2.parent_id where t1.parent_id=0 and t1.datafix=0 and t2.datafix=0) t3
+left join t_category t4 on t3.cid2=t4.parent_id and t4.datafix=0
+ '.$where.' '.$order.' '.@$arr['sLimit'];
+        return self::findBySql($sql)->asArray()->all();
+    }
+    
     public static function loadCategoryTree(){
-        $category=self::getAll('id,name,parent_id,type', ['datafix'=>self::DATAFIX]);
+        $category=self::getAll('id,name,parent_id,level,type', ['datafix'=>self::DATAFIX]);
         return self::getTree($category,0);
     }
     static function getTree($data, $pId)
@@ -118,5 +148,15 @@ class Category extends \common\core\common\ActiveRecord
             }  
         } 
         return $tree; 
+    }
+    
+    /**
+     * @param $pid
+     * @return array
+     */
+    public function getCategoryList($pid)
+    {
+        $model = self::findAll(array('parent_id'=>$pid));
+        return ArrayHelper::map($model, 'id', 'name');
     }
 }
