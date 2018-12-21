@@ -8,7 +8,6 @@ require_once '/path/to/aliyun-openapi-php-sdk/aliyun-php-sdk-nls-filetrans/nls_f
 require_once '/path/to/aliyun-openapi-php-sdk/aliyun-php-sdk-nls-filetrans/nls_filetrans/Request/V20180817/GetTaskResultRequest.php';
 use nls_filetrans\Request\V20180817\SubmitTaskRequest;
 use nls_filetrans\Request\V20180817\GetTaskResultRequest;
-use phpDocumentor\Reflection\Types\Static_;
 /**
  * 地域ID
  * 常量内容，请勿改变

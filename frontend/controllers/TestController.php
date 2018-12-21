@@ -10,6 +10,7 @@ use common\models\category\CategoryLevel;
 use common\helpers\Pinyin;
 use common\models\category\Brand;
 use common\models\category\Category;
+use common\components\SpeechInfo;
 /**
  * Site controller
  */
@@ -24,11 +25,14 @@ class TestController extends Controller
         
     }
     public function actionUpload(){
+        $rtn=SpeechInfo::uploadSpeech();
+        print_r($rtn);
+        exit;
         if ($_FILES["file"]["error"] > 0){
             echo json_encode(['code' => -1, 'data' => '', 'msg' => $_FILES["file"]["error"]]);
             exit;
         }
-        
+        print_r($_FILES);
         $name = (string)$_POST['name'];
         $word=(string)$_POST['word'];
         $file= Yii::getAlias('@data-file/uploads/speech') .'/'. $name;
@@ -64,7 +68,7 @@ class TestController extends Controller
         exit;
         $file=dirname(__FILE__).'/../web/wav/1522138979-208034-271191.wav';
         $data=SpeechService::baiduAsr($file);
-        //$res=SpliteService::getPhpanalysisKeywords($data['result'][0]);
+        $res=SpliteService::getPhpanalysisKeywords($data['result'][0]);
         print_r($data);
     }
 }

@@ -14,15 +14,15 @@ class UtilHelper{
     public static function rtnError($errorCode="10001",$msg='',$callback=null){
         if(!empty($msg)){
             $errorMsg=$msg;
-        }else if(!empty(Yii::$app->params['error_conf'][$errorCode])){
-                $errorMsg=Yii::$app->params['error_conf'][$errorCode];
-            }else{
-                $errorCode='10001';
-                $errorMsg=Yii::$app->params['error_conf'][$errorCode];
-            }
-            $return = array("code"=>$errorCode,"msg"=>$errorMsg);
-            echo (empty($callback) ?json_encode($return) : $callback."(".(json_encode($return)).")");
-            exit;
+        }else if(!empty(Yii::t('error',$errorCode))){
+            $errorMsg=Yii::t('error',$errorCode);
+        }else{
+            $errorCode='10001';
+            $errorMsg=Yii::t('error',$errorCode);
+        }
+        $return = array("code"=>$errorCode,"msg"=>$errorMsg,"pos"=>$pos);
+        echo (empty($callback) ?json_encode($return) : $callback."(".(json_encode($return)).")");
+        exit;
     }
     
     /**
@@ -31,14 +31,14 @@ class UtilHelper{
     public static function rtnCode($errorCode="10001",$msg=''){
         if(!empty($msg)){
             $error_msg=$msg;
-        }else if(!empty(Yii::$app->params['error_conf'][$errorCode])){
-                $errorMsg=Yii::$app->params['error_conf'][$errorCode];
-            }else{
-                $errorCode='10001';
-                $errorMsg=Yii::$app->params['error_conf'][$errorCode];
-            }
-            $return = array("code"=>$errorCode,"msg"=>$errorMsg);
-            return $return;
+        }else if(!empty(Yii::t('error',$errorCode))){
+            $errorMsg=Yii::t('error',$errorCode);
+        }else{
+            $errorCode='10001';
+            $errorMsg=Yii::t('error',$errorCode);
+        }
+        $return = array("code"=>$errorCode,"msg"=>$errorMsg);
+        return $return;
     }
     /**
      * 获取 model的第一条错误
@@ -259,6 +259,14 @@ class UtilHelper{
         }
         
         return substr(hash('sha512', $randomData), 0, $tokenLen);
+    }
+    /**
+     * 返回md5的唯一码
+     * @return string
+     */
+    public static function rtnUqMd5Code(){
+        $randomData = mt_rand() . mt_rand() . mt_rand() . mt_rand() . microtime(true) . uniqid(mt_rand(), true);
+        return md5($randomData);
     }
     /**
      * 
