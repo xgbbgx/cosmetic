@@ -11,7 +11,7 @@ class UtilHelper{
     /**
      * 返回错误码
      */
-    public static function rtnError($errorCode="10001",$msg='',$callback=null){
+    public static function rtnError($errorCode="10001",$msg='',$callback=null,$pos=null){
         if(!empty($msg)){
             $errorMsg=$msg;
         }else if(!empty(Yii::t('error',$errorCode))){
@@ -30,12 +30,24 @@ class UtilHelper{
      */
     public static function rtnCode($errorCode="10001",$msg=''){
         if(!empty($msg)){
-            $error_msg=$msg;
+            $errorMsg=$msg;
         }else if(!empty(Yii::t('error',$errorCode))){
             $errorMsg=Yii::t('error',$errorCode);
         }else{
             $errorCode='10001';
             $errorMsg=Yii::t('error',$errorCode);
+        }
+        $return = array("code"=>$errorCode,"msg"=>$errorMsg);
+        return $return;
+    }
+    public static function rtnCommonCode($errorCode="10001",$msg=''){
+        if(!empty($msg)){
+            $errorMsg=$msg;
+        }else if(!empty(Yii::$app->params['error_conf'][$errorCode])){
+            $errorMsg=Yii::$app->params['error_conf'][$errorCode];
+        }else{
+            $errorCode='10001';
+            $errorMsg=Yii::$app->params['error_conf'][$errorCode];
         }
         $return = array("code"=>$errorCode,"msg"=>$errorMsg);
         return $return;

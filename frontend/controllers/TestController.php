@@ -11,6 +11,7 @@ use common\helpers\Pinyin;
 use common\models\category\Brand;
 use common\models\category\Category;
 use common\components\SpeechInfo;
+use common\models\speech\SpeechFlow;
 /**
  * Site controller
  */
@@ -57,6 +58,10 @@ class TestController extends Controller
         $res=AliSpeechInfo::speechArc($file);
         print_r($res);
         exit;*/
+       
+        $speechInfo=SpeechInfo::arc($speech['dst_url'],1);
+        print_r($speechInfo);
+        exit;
         return $this->render('index');
     }
     public function actionA(){

@@ -5,8 +5,9 @@ use common\helpers\UtilHelper;
 use common\models\speech\SpeechFlow;
 use common\services\SpeechService;
 use common\services\aliyun\AliSpeechInfo;
+use common\models\SourceToken;
+use common\models\speech\SpeechArc;
 class SpeechInfo{
-    public static $baseDir=Yii::getAlias('@data-file');
     /**
      * 
      * @param string $fName
@@ -14,8 +15,9 @@ class SpeechInfo{
      * @return string[]|string[]|unknown[]
      */
     public static function upload($fName='file',$dir=''){
+        $baseDir=Yii::getAlias('@data-file');
         if ($_FILES[$fName]["error"] > 0){
-            return UtilHelper::rtnCode('10101',Yii::t('error', '10101').':'.$_FILES[$fName]["error"]);
+            return UtilHelper::rtnCommonCode('10101',Yii::t('error', '10101').':'.$_FILES[$fName]["error"]);
         }
         $code=UtilHelper::rtnUqMd5Code();
         $nodeDir= '/uploads/speech';
@@ -23,11 +25,11 @@ class SpeechInfo{
             $dir='/'.date('Y').'/'.date('m').'/'.date('d').'/';
         }
         $urlDir=$nodeDir.$dir;
-        $fileDir=self::$baseDir.$nodeDir.$dir;
+        $fileDir=$baseDir.$nodeDir.$dir;
         if(!is_dir($fileDir)){
             if(mkdir($fileDir,0777,true)){
             }else{
-                return UtilHelper::rtnCode('10102');
+                return UtilHelper::rtnCommonCode('10102');
             }
         }
         $ext='';
@@ -40,12 +42,12 @@ class SpeechInfo{
                 $ext='';
         }
         if(empty($ext)){
-            return UtilHelper::rtnCode('10103');
+            return UtilHelper::rtnCommonCode('10103');
         }
         $fileName=$code.'.'.$ext;
         $file=$fileDir.$fileName;
         if(!move_uploaded_file($_FILES[$fName]["tmp_name"],$file)){
-           return UtilHelper::rtnCode('10104');
+            return UtilHelper::rtnCommonCode('10104');
         }
         return [
             'dst_code'=>$code,
@@ -69,25 +71,78 @@ class SpeechInfo{
             if($speechFlow->save()){
                 $data=[
                     'code'=>'10001',
-                    'msg'=>Yii::t('error', '10001'),
+                    'msg'=>Yii::$app->params['error_conf']['10001'],
                     'data'=>$speechFlow
                 ];
                 return $data;
             }else{
-                return UtilHelper::rtnCode('10002');
+                return UtilHelper::rtnCommonCode('10002');
             }
         }else{
             return $files;
         }
     }
-    
-    public static function arc($dstUrl,$type=1){
-        $absFile=self::$baseDir.$dstUrl;
+    /**
+     * 
+     * @param unknown $id 上传speech_flow的流水id
+     * @param number $type
+     * @return string[]|mixed[]|string[]|mixed[]|NULL[]
+     */
+    public static function arc($id,$type=1){
+        $result='';
+        $speech=SpeechFlow::getOne('dst_url',['id'=>$id]);
+        if(empty($speech['dst_url'])){
+            return  UtilHelper::rtnCommonCode('10202');
+        }
+        $dstUrl=$speech['dst_url'];
+        $absFile=Yii::getAlias('@data-file').$dstUrl;
         if($type==1){//baidu
             $rtnAsr=SpeechService::baiduAsr($absFile);
+            if(isset($rtnAsr['result'])){
+                $result=@$rtnAsr['result'][0];
+            }
         }else if($type==2){//aliyun
-            $rtnAsr=AliSpeechInfo::speechArc($absFile);
+           $token=self::rtnAliToken();
+           if(empty($token)){
+               return UtilHelper::rtnCommonCode('10003');
+           }
+            $rtnAsr=AliSpeechInfo::speechArc($token,$absFile);
+            if(isset($rtnAsr['result'])){
+                $result=$rtnAsr['result'];
+            }
         }
-        
+        if($result){//翻译内容入库
+            $speechArc=new SpeechArc();
+            $speechArc->speech_flow_id=$id;
+            $speechArc->dst_url=$dstUrl;
+            $speechArc->content=$result;
+            $speechArc->save();
+        }
+        return empty($result) ? UtilHelper::rtnCommonCode('10201'):[
+            'code'=>'',
+            'msg'=>Yii::$app->params['error_conf']['10001'],
+            'result'=>$result
+        ];
+    }
+
+    public static function rtnAliToken(){
+        $token='';
+        $sourceId=Yii::$app->params['base_conf']['source_token']['0']['key'];
+        $sourceToken=SourceToken::loadExpiredTokenBySourceId($sourceId);
+        if(!$sourceToken){
+            $speechConf=Yii::$app->params['speech_conf']['aliyun'];
+            $tokenObj=AliSpeechInfo::getAccessToken($speechConf['access_key_id'], $speechConf['access_key_secret']);
+            if(isset($tokenObj->Token->Id) && $tokenObj->Token->Id){
+                $token=$tokenObj->Token->Id;
+                $sourceToken=new SourceToken();
+                $sourceToken->token=$token;
+                $sourceToken->expire_time=intval($tokenObj->Token->ExpireTime);
+                $sourceToken->source_id=$sourceId;
+                $sourceToken->save();
+            }
+        }else{
+            $token=$sourceToken['token'];
+        }
+        return $token;
     }
 }

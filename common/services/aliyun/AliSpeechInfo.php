@@ -35,12 +35,8 @@ class AliSpeechInfo{
             print "Error: " . $e->getErrorCode() . " Message: " . $e->getMessage() . "\n";
         }
     }
-    public  static function speechArc($file){
+    public  static function speechArc($token,$file){
         $speechConf=Yii::$app->params['speech_conf']['aliyun'];
-        //$token=self::getAccessToken($speechConf['access_key_id'], $speechConf['access_key_secret']);
-       // print_r($token);
-       // $token=$token->Token->Id;
-       $token='122b3e13440944f4bd642de5aa92b631';
        return  self::Post($file,$token,$speechConf['app_key']);
     }
     public static function Post($file,$token,$appKey){
@@ -87,8 +83,8 @@ class AliSpeechInfo{
         return $result;
     }
     
-    public static  function Synthesis($text,$file){
-        $token='122b3e13440944f4bd642de5aa92b631';
+    public static  function Synthesis($token,$text,$file){
+        //$token='122b3e13440944f4bd642de5aa92b631';
         $speechConf=Yii::$app->params['speech_conf']['aliyun'];
         
         $textUrlEncode = urlencode($text);
