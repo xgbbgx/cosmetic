@@ -50,6 +50,9 @@ class FileHelper{
                 case 'swf':
                     header("Content-type:application/x-shockwave-flash");
                     break;
+                case 'wav':
+                    header("Content-type:audio/wav");
+                    break;
                 default:
                     header( "Content-type: image/jpg");
             }

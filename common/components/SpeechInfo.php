@@ -7,6 +7,8 @@ use common\services\SpeechService;
 use common\services\aliyun\AliSpeechInfo;
 use common\models\SourceToken;
 use common\models\speech\SpeechArc;
+use common\services\SpliteService;
+use common\models\speech\StopWord;
 class SpeechInfo{
     /**
      * 
@@ -90,9 +92,13 @@ class SpeechInfo{
      */
     public static function arc($id,$type=1){
         $result='';
-        $speech=SpeechFlow::getOne('dst_url',['id'=>$id]);
+        $speech=SpeechFlow::getOne('dst_url,size',['id'=>$id]);
         if(empty($speech['dst_url'])){
             return  UtilHelper::rtnCommonCode('10202');
+        }
+        //判断文件大小
+        if($speech['size']<1024){
+            return  UtilHelper::rtnCommonCode('10203');
         }
         $dstUrl=$speech['dst_url'];
         $absFile=Yii::getAlias('@data-file').$dstUrl;
@@ -111,17 +117,20 @@ class SpeechInfo{
                 $result=$rtnAsr['result'];
             }
         }
+        $speechArc='';
         if($result){//翻译内容入库
             $speechArc=new SpeechArc();
             $speechArc->speech_flow_id=$id;
             $speechArc->dst_url=$dstUrl;
             $speechArc->content=$result;
+            $speechArc->type=$type;
             $speechArc->save();
+            SpeechFlow::updateStatusById($id);
         }
         return empty($result) ? UtilHelper::rtnCommonCode('10201'):[
-            'code'=>'',
+            'code'=>'10001',
             'msg'=>Yii::$app->params['error_conf']['10001'],
-            'result'=>$result
+            'data'=>$speechArc
         ];
     }
 
@@ -144,5 +153,24 @@ class SpeechInfo{
             $token=$sourceToken['token'];
         }
         return $token;
+    }
+    
+    public static function splitWord($speechArcId){
+        $speechArc=SpeechArc::findOne(['id'=>$speechArcId]);
+        if(isset($speechArc['content']) && $speechArc['content']){
+            $split=SpliteService::getPscwsKeywords($speechArc['content']);
+            print_r($split);
+            exit;
+            if($split){
+                $exacWord=$split;
+                $stopWord=StopWord::loadStopWordByNames($split);
+                if($stopWord){
+                    $exacWord=array_diff($split,$stopWord) ;
+                }
+                $speechArc->split_word=empty($split)?'':implode(",", $split);
+                $speechArc->exact_word=empty($exacWord)?'':implode(",", $exacWord);
+                $speechArc->save();
+            }
+        }
     }
 }

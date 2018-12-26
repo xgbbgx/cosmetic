@@ -31,7 +31,7 @@ class SpliteService{
             $tags=substr($tags, 1);
         }
         $tagsArr=explode(',', $tags);
-        return self::rtnTags($tagsArr);
+        return $tagsArr;
     }
     /**
      * https://www.jianshu.com/p/ebaa0dbbfa91
@@ -50,6 +50,7 @@ class SpliteService{
         $pscws->set_charset("utf8");
         $pscws->set_dict( dirname(__FILE__) .'//pscws4//etc//dict.utf8.xdb');
         $pscws->set_rule( dirname(__FILE__) .'//pscws4//etc//rules.utf8.ini');
+        $pscws->set_dict( dirname(__FILE__) .'//pscws4//etc//mydict.txt');
         $pscws->set_ignore(true);
         $pscws->send_text($data);
         $tags='';
@@ -63,7 +64,7 @@ class SpliteService{
             $tags=substr($tags, 1);
         }
         $tagsArr=explode(',', $tags);
-        return self::rtnTags($tagsArr);
+        return $tagsArr;
     }
     
     public static function  vicword($data){
@@ -78,7 +79,7 @@ class SpliteService{
                 $tagsArr[]=$a[0];
             }
         }
-        return self::rtnTags($tagsArr);
+        return $tagsArr;
     }
     public static function vicwordAdd($word){
         define('_VIC_WORD_DICT_PATH_',__DIR__.'/vicword/Data/dict.json');

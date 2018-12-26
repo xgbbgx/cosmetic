@@ -7,6 +7,8 @@ use yii\db\Expression;
 class BaseActiveRecord extends ActiveRecord{
     const DATAFIX_DELETE = 1;//删除
     const DATAFIX = 0;
+    const STATUS_UNTREATED=0;//未处理
+    const STATUS_PROCESSES=1;//已处理
     /**
      * 
      * @param unknown $select

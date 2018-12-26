@@ -2,8 +2,6 @@
 
 namespace common\models\speech;
 
-use Yii;
-
 /**
  * This is the model class for table "{{%speech_flow}}".
  *
@@ -16,6 +14,7 @@ use Yii;
  * @property int $created_by
  * @property int $updated_at
  * @property int $updated_by
+ * @property int $status 0未处理1已处理
  * @property int $datafix 0正常1删除
  */
 class SpeechFlow extends \common\core\common\ActiveRecord
@@ -34,7 +33,7 @@ class SpeechFlow extends \common\core\common\ActiveRecord
     public function rules()
     {
         return [
-            [['size', 'created_at', 'created_by', 'updated_at', 'updated_by', 'datafix'], 'integer'],
+            [['size','status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'datafix'], 'integer'],
             [['code'], 'string', 'max' => 32],
             [['dst_name'], 'string', 'max' => 50],
             [['dst_url'], 'string', 'max' => 255],
@@ -56,7 +55,17 @@ class SpeechFlow extends \common\core\common\ActiveRecord
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
+            'status' => 'Status',
             'datafix' => 'Datafix',
         ];
+    }
+    /**
+     * 
+     * @param unknown $id
+     * @param number $status 0未处理 1已处理
+     * @return number
+     */
+    public static function updateStatusById($id,$status=self::STATUS_PROCESSES) {
+        return self::updateAll(['status'=>$status],['id'=>$id]);
     }
 }

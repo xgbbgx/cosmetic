@@ -12,6 +12,7 @@ use common\models\category\Brand;
 use common\models\category\Category;
 use common\components\SpeechInfo;
 use common\models\speech\SpeechFlow;
+use app\models\EsStore;
 /**
  * Site controller
  */
@@ -27,6 +28,12 @@ class TestController extends Controller
     }
     public function actionUpload(){
         $rtn=SpeechInfo::uploadSpeech();
+        if(isset($rtn['data']->id)){
+            $speechInfo=SpeechInfo::arc($rtn['data']->id,1);
+            $speech['score']=@$speechInfo['result'];
+            echo json_encode($speech);
+            exit;
+        }
         print_r($rtn);
         exit;
         if ($_FILES["file"]["error"] > 0){
@@ -46,6 +53,20 @@ class TestController extends Controller
         exit;
     }
     public function actionIndex(){
+        SpeechInfo::splitWord(2);
+        echo '<pre>';
+        $query = [
+            'multi_match' => ['query'=>'护法',"fields"=>["name"]]
+        ];
+        
+        $highlight = [
+            'pre_tags' => '<em>',
+            'post_tags' => '</em>',
+            'fields' => ['keyword'=>new \stdClass()]
+        ];
+        $customer = \common\models\elastic\EsStore::find()->query($query)->highlight($highlight)->asArray()->all();
+        print_r($customer);
+        exit;
         /**
          *$tree=Category::loadCategoryTree();
        print_r($tree);
@@ -57,11 +78,11 @@ class TestController extends Controller
 
         $res=AliSpeechInfo::speechArc($file);
         print_r($res);
-        exit;*/
-       
-        $speechInfo=SpeechInfo::arc($speech['dst_url'],1);
-        print_r($speechInfo);
         exit;
+       
+        $speechInfo=SpeechInfo::arc(1,1);
+        print_r($speechInfo);
+        exit;*/
         return $this->render('index');
     }
     public function actionA(){

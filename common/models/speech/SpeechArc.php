@@ -18,6 +18,7 @@ use Yii;
  * @property int $created_by
  * @property int $updated_at
  * @property int $updated_by
+ * @property int $status 0未处理1已处理
  * @property int $datafix 0正常1删除
  */
 class SpeechArc extends \common\core\common\ActiveRecord
@@ -36,7 +37,7 @@ class SpeechArc extends \common\core\common\ActiveRecord
     public function rules()
     {
         return [
-            [['speech_flow_id', 'type', 'created_at', 'created_by', 'updated_at', 'updated_by', 'datafix'], 'integer'],
+            [['speech_flow_id', 'type','status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'datafix'], 'integer'],
             [['dst_url', 'content', 'split_word', 'exact_word'], 'string', 'max' => 255],
         ];
     }
@@ -58,6 +59,7 @@ class SpeechArc extends \common\core\common\ActiveRecord
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
+            'status' => 'Status',
             'datafix' => 'Datafix',
         ];
     }
