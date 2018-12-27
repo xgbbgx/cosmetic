@@ -8,6 +8,8 @@ use yii\data\ActiveDataProvider;
 use common\core\backend\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Html;
+use common\helpers\UtilHelper;
 
 /**
  * SpeechController implements the CRUD actions for SpeechArc model.
@@ -35,13 +37,61 @@ class SpeechController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => SpeechArc::find(),
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->render('index');
+    }
+    
+    public function actionList(){
+        $sEcho= empty($_GET['sEcho']) ? 0:intval($_GET['sEcho']);
+        $colums=array("id",'',"content","split_word",'exact_word','status','type');
+        $arr=UtilHelper::getDataTablesParams($_GET,$colums);
+        $output = array(
+            "sEcho" => $sEcho,
+            "iTotalRecords" => 1,
+            "iTotalDisplayRecords" => 1,
+            "aaData" => array()
+        );
+        $request=Yii::$app->request;
+        $type=intval($request->get('type'));
+        if($type){
+            if(empty($arr['sWhere'])){
+                $arr['sWhere'] ='where type='.$type;
+            }else{
+                $arr['sWhere'] .=' and type='.$type;
+            }
+        }
+        $iData=SpeechArc::search($arr);
+        $totalNum=empty($iData['totalNum']) ?0:$iData['totalNum'];
+        $output['iTotalRecords']=$totalNum;
+        $output['iTotalDisplayRecords']=$totalNum;
+        if($totalNum){
+            $arcType=Yii::$app->params['speech_conf']['arc_type'];
+            $iList=empty($iData['list']) ?[]:$iData['list'];
+            foreach($iList as $k=>$i){
+                $id=$i['id'];
+                $action='
+                <a  href="/speech/view?id='.$id.'"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp;
+                <a  href="/speech/update?id='.$id.'"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;
+                <a href="/speech/delete?id='.$id.'" title="删除" aria-label="删除" data-pjax="0" data-confirm="您确定要删除此项吗？" data-method="post">
+                <i class="glyphicon glyphicon-trash"></i></a>';
+                $audio='<video style="height:50px;width:200px;" controls="" autoplay="false" name="media">
+                                    <source src="'.$i['dst_url'].'" type="audio/mpeg"></video>';
+                $statusStr='<i class="icon-remove"></i>';
+                if($i['status']=='1'){
+                    $statusStr='<i class="icon-ok"></i>';
+                }
+                $aaData=array($id,
+                    $audio,
+                    Html::encode($i['content']),
+                    Html::encode($i['split_word']),
+                    Html::encode($i['exact_word']),
+                    $statusStr,
+                    empty($arcType[$i['type']]) ? '':$arcType[$i['type']],
+                    $action);
+                $output['aaData'][]=$aaData;
+            }
+        }
+        echo json_encode($output);
+        exit;
     }
 
     /**

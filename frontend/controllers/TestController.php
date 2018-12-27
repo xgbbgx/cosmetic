@@ -13,6 +13,7 @@ use common\models\category\Category;
 use common\components\SpeechInfo;
 use common\models\speech\SpeechFlow;
 use app\models\EsStore;
+use common\services\SpliteService;
 /**
  * Site controller
  */
@@ -54,6 +55,7 @@ class TestController extends Controller
     }
     public function actionIndex(){
         SpeechInfo::splitWord(2);
+        exit();
         echo '<pre>';
         $query = [
             'multi_match' => ['query'=>'护法',"fields"=>["name"]]

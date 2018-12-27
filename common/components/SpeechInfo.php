@@ -158,7 +158,7 @@ class SpeechInfo{
     public static function splitWord($speechArcId){
         $speechArc=SpeechArc::findOne(['id'=>$speechArcId]);
         if(isset($speechArc['content']) && $speechArc['content']){
-            $split=SpliteService::getPscwsKeywords($speechArc['content']);
+            $split=SpliteService::getPhpanalysisKeywords($speechArc['content']);
             print_r($split);
             exit;
             if($split){

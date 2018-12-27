@@ -19,7 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Brand', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
+<a href="/test/delete?id=20" title="删除" aria-label="删除" data-pjax="0" data-confirm="您确定要删除此项吗？" 
+data-method="post">
+<span class="glyphicon glyphicon-trash"></span></a>
     <?= 
     /** DataTables::widget([
         'dataProvider' => $dataProvider,

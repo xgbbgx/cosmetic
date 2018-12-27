@@ -33,6 +33,21 @@ class SpliteService{
         $tagsArr=explode(',', $tags);
         return $tagsArr;
     }
+    public static function makePhpanalysis(){
+        $dicAddon = dirname(__FILE__).'/phpanalysis/dict/not-build/base_dic_new.txt';
+        require_once   'phpanalysis/phpanalysis.class.php';
+        PhpAnalysis::$loadInit = false;
+        $pa = new PhpAnalysis('utf-8', 'utf-8', false);
+        $pa->MakeDict( $dicAddon );
+        return true;
+    }
+    public static function exportPhpanalysis(){
+        require_once   'phpanalysis/phpanalysis.class.php';
+        $pa = new PhpAnalysis('utf-8', 'utf-8', true);
+        $pa->ExportDict(dirname(__FILE__).'/phpanalysis/dict/not-build/base_dic_source.txt');
+        echo "build success：base_dic_source.txt ！";
+        exit();
+    }
     /**
      * https://www.jianshu.com/p/ebaa0dbbfa91
      * @param unknown $data

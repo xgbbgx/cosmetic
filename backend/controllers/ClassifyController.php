@@ -67,7 +67,8 @@ class ClassifyController extends Controller
                 $action='
                 <a  href="/classify/view?id='.$id.'"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp;
                 <a  href="/classify/update?id='.$id.'"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;
-                <a href="javascript:void(0);" onclick="delBlog(\''.$id.'\',\''.Html::encode($i['name']).'\',this)">
+                <a href="/classify/delete?id='.$id.'" title="删除" aria-label="删除" data-pjax="0" 
+                data-confirm="您确定要删除此项吗？" data-method="post">
                 <i class="glyphicon glyphicon-trash"></i></a>';
                 $aaData=array($id,
                     $img,

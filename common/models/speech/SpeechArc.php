@@ -63,4 +63,22 @@ class SpeechArc extends \common\core\common\ActiveRecord
             'datafix' => 'Datafix',
         ];
     }
+    public static function search($arr){
+        $data=[];
+        $order=empty($arr['sOrder']) ? ' order by id ':$arr['sOrder'];
+        $where = '';
+        if(isset($arr['sWhere']) && $arr['sWhere']){
+            $where=$arr['sWhere'].' and datafix= '.self::DATAFIX;
+        }else{
+            $where=' where datafix= '.self::DATAFIX;
+        }
+        $totalNum=self::findBySql('select count(*) from '.self::tableName().' '.$where)->scalar();
+        if($totalNum){
+            $sql='select id,speech_flow_id,dst_url,content,split_word,exact_word,status,type from '.
+                self::tableName().' '.$where.' '.$order.' '.@$arr['sLimit'];;
+                $data['list']=self::findBySql($sql)->asArray()->all();
+        }
+        $data['totalNum']=empty($totalNum) ?0:$totalNum;
+        return $data;
+    }
 }

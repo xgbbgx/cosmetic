@@ -104,8 +104,10 @@ class TestController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        return;
+        $model=$this->findModel($id);
+        $model->datafix=$model::DATAFIX_DELETE;
+        $model->save();
         return $this->redirect(['index']);
     }
 
