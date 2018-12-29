@@ -111,7 +111,7 @@ class TagController extends Controller
         $model = new ProductParticiple();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['participle-view', 'id' => $model->id]);
         }
 
         return $this->render('participle_create', [
@@ -131,7 +131,7 @@ class TagController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['participle_view', 'id' => $model->id]);
+            return $this->redirect(['participle-view', 'id' => $model->id]);
         }
 
         return $this->render('participle_update', [
@@ -151,7 +151,7 @@ class TagController extends Controller
         $model=$this->findModel($id);
         $model->datafix=$model::DATAFIX_DELETE;
         $model->save();
-        return $this->redirect(['index']);
+        return $this->redirect(['participle-list']);
     }
 
     /**
