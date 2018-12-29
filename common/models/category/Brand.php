@@ -2,8 +2,6 @@
 
 namespace common\models\category;
 
-use Yii;
-use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "{{%brand}}".

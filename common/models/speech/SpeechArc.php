@@ -2,7 +2,6 @@
 
 namespace common\models\speech;
 
-use Yii;
 
 /**
  * This is the model class for table "{{%speech_arc}}".

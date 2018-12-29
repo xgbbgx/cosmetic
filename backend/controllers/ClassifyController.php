@@ -4,16 +4,11 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\category\Brand;
-use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\core\backend\Controller;
-use backend\models\BrandSearch;
-use yii\grid\GridView;
 use common\helpers\UtilHelper;
 use yii\helpers\Html;
-use yii\grid\ActionColumn;
-use common\models\category\CategoryLevel;
 use common\models\category\Category;
 
 /**

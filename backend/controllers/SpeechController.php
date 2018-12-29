@@ -4,7 +4,6 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\speech\SpeechArc;
-use yii\data\ActiveDataProvider;
 use common\core\backend\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
