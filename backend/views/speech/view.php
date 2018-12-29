@@ -23,6 +23,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('重新分词', ['split-word', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this item?',
+                'method' => 'post',
+            ],
+        ]) ?>
     </p>
 
     <?= DetailView::widget([
@@ -30,14 +37,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'speech_flow_id',
-            'dst_url:url',
+            'dst_url',
             'type',
             'content',
             'split_word',
             'exact_word',
-            'created_at',
+            [
+                'attribute'=>'created_at',
+                'label'=>'创建时间',
+                'value'=>date('Y-m-d H:i:s',$model->created_at),
+            ],
             'created_by',
-            'updated_at',
+            [
+                'attribute'=>'created_at',
+                'label'=>'创建时间',
+                'value'=>date('Y-m-d H:i:s',$model->updated_at),
+            ],
             'updated_by',
             'status',
             'datafix',

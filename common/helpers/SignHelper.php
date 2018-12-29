@@ -12,7 +12,7 @@ class SignHelper{
         $signMsg = "";
         ksort($pay_params);
         foreach($pay_params as $key=>$val){
-            if($key!="signMsg" && isset($val) && @$val!="")
+            if($key!="sign_msg" && isset($val) && @$val!="")
             {
                 $params_str .= $key."=".$val."&";
             }
@@ -30,7 +30,7 @@ class SignHelper{
         $params_str = "";
         $signMsg = "";
         foreach($pay_params as $key=>$val){
-            if($key!="signMsg" && !is_null($val) && @$val!="")
+            if($key!="sign_msg" && !is_null($val) && @$val!="")
             {
                 $params_str .= $key."=".$val."&";
             }
@@ -38,8 +38,8 @@ class SignHelper{
         $params_str .= "key=" . $md5_key;
         $signMsg = strtolower(md5($params_str));
         $return=false;
-        if($signMsg && isset($pay_params['signMsg']) && $pay_params['signMsg']){
-            if($signMsg==$pay_params['signMsg']){
+        if($signMsg && isset($pay_params['sign_msg']) && $pay_params['sign_msg']){
+            if($signMsg==$pay_params['sign_msg']){
                 $return=true;
             }
         }

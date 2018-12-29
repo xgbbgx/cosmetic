@@ -62,8 +62,8 @@ class SpeechInfo{
      * 
      * @return string[]|\common\components\string[]|\common\components\unknown[]
      */
-    public static function uploadSpeech(){
-        $files=self::upload();
+    public static function uploadSpeech($fName='file',$dir=''){
+        $files=self::upload($fName,$dir);
         if(isset($files['dst_code']) && $files['dst_code']){
             $speechFlow=new SpeechFlow();
             $speechFlow->code=$files['dst_code'];
@@ -156,11 +156,11 @@ class SpeechInfo{
     }
     
     public static function splitWord($speechArcId){
+        $data=[];
         $speechArc=SpeechArc::findOne(['id'=>$speechArcId]);
         if(isset($speechArc['content']) && $speechArc['content']){
+            $data['content']=$speechArc['content'];
             $split=SpliteService::getPhpanalysisKeywords($speechArc['content']);
-            print_r($split);
-            exit;
             if($split){
                 $exacWord=$split;
                 $stopWord=StopWord::loadStopWordByNames($split);
@@ -170,7 +170,40 @@ class SpeechInfo{
                 $speechArc->split_word=empty($split)?'':implode(",", $split);
                 $speechArc->exact_word=empty($exacWord)?'':implode(",", $exacWord);
                 $speechArc->save();
+                
+                $data['split_word']=$speechArc->split_word;
+                $data['exact_word']=$speechArc->exact_word;
             }
         }
+        return $data;
+    }
+    /**
+     * 
+     * @param string $fName
+     * @param string $dir
+     * @return string[]|mixed[]
+     */
+    public static function rtnSpeechTag($fName='file',$dir=''){
+        $upload=self::uploadSpeech($fName,$dir);
+        if(isset($upload['code']) && $upload['code']){
+            if($upload['code']=='10001' && !empty($upload['data']->id)){
+                $speechArc=SpeechInfo::arc($upload['data']->id,1);
+                if(isset($speechArc['code']) && $speechArc['code']){
+                    if($speechArc['code']=='10001' && !empty($speechArc['data']->id)){
+                        $splitWord=self::splitWord($speechArc['data']->id);
+                        return [
+                            'code'=>'10001',
+                            'msg'=>Yii::$app->params['error_conf']['10001'],
+                            'data'=>$splitWord
+                        ];
+                    }else{
+                        return UtilHelper::rtnCommonCode($speechArc['code'],$speechArc['msg']);
+                    }
+                }
+            }else{
+                return UtilHelper::rtnCommonCode($upload['code'],$upload['msg']);
+            }
+        }
+        return UtilHelper::rtnCommonCode('10002');
     }
 }

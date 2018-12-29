@@ -36,7 +36,7 @@ class AdmUser extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username','nickname', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at'], 'required'],
+            [['username','nickname', 'auth_key', 'password_hash', 'email'], 'required'],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['username', 'auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],

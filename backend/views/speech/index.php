@@ -9,12 +9,6 @@ AppAsset::addJs($this, '@web/js/yii.js');
 ?>
 <div class="brand-index">
     <div class="row-fluid">
-    	<div class="span2">
-    		 <?= Html::a('创建词典', ['create'], ['class' => 'btn btn-success']) ?>
-    	</div>
-    	<div class="span2">
-    		 <a href="javascript:void(0);" class='btn green' id="export-dic">导入新标签</a>
-    	</div>
         <div class="span4">
     		<div class="pull-right">
     			<select style="width:160px;"

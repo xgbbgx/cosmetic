@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use common\helpers\UtilHelper;
+use common\components\SpeechInfo;
 
 /**
  * SpeechController implements the CRUD actions for SpeechArc model.
@@ -70,11 +71,9 @@ class SpeechController extends Controller
                 $id=$i['id'];
                 $action='
                 <a  href="/speech/view?id='.$id.'"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp;
-                <a  href="/speech/update?id='.$id.'"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;
                 <a href="/speech/delete?id='.$id.'" title="删除" aria-label="删除" data-pjax="0" data-confirm="您确定要删除此项吗？" data-method="post">
                 <i class="glyphicon glyphicon-trash"></i></a>';
-                $audio='<video style="height:50px;width:200px;" controls="" autoplay="false" name="media">
-                                    <source src="'.$i['dst_url'].'" type="audio/mpeg"></video>';
+                $audio='<video style="height:50px;width:200px;" src="'.$i['dst_url'].'" controls="controls"  name="media"></video>';
                 $statusStr='<i class="icon-remove"></i>';
                 if($i['status']=='1'){
                     $statusStr='<i class="icon-ok"></i>';
@@ -174,5 +173,12 @@ class SpeechController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    
+    public function actionSplitWord($id)
+    {
+        SpeechInfo::splitWord($id);
+        
+        return $this->redirect(['view', 'id' =>$id]);
     }
 }

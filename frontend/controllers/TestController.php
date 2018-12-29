@@ -14,6 +14,7 @@ use common\components\SpeechInfo;
 use common\models\speech\SpeechFlow;
 use app\models\EsStore;
 use common\services\SpliteService;
+use common\models\elastic\Product;
 /**
  * Site controller
  */
@@ -28,14 +29,35 @@ class TestController extends Controller
         
     }
     public function actionUpload(){
-        $rtn=SpeechInfo::uploadSpeech();
-        if(isset($rtn['data']->id)){
-            $speechInfo=SpeechInfo::arc($rtn['data']->id,1);
-            $speech['score']=@$speechInfo['result'];
-            echo json_encode($speech);
-            exit;
+        $speech=[];
+        $rtn=SpeechInfo::rtnSpeechTag();
+        if(isset($rtn['code']) && $rtn['code']=='10001'){
+            $content='';
+            if(isset($rtn['data']['exact_word'])){
+                $content=$rtn['data']['exact_word'];
+            }else if(isset($rtn['data']['split_word'])){
+                $content=$rtn['data']['split_word'];
+            }else if(isset($rtn['data']['conent'])){
+                $content=$rtn['data']['conent'];
+            }
+            $content=str_replace(',', ' ', $content);
+            $query = [
+                'multi_match' => ['query'=>$content,
+                    "fields"=>['product_name',"feature",'buzzword']
+                ]
+            ];
+            
+            $highlight = [
+                'pre_tags' => '<em>',
+                'post_tags' => '</em>',
+                'fields' => ['keyword'=>new \stdClass()]
+            ];
+            $customer = Product::find()->query($query)
+            ->highlight($highlight)->asArray()->all();
+            $speech['score']=json_encode($customer);
         }
-        print_r($rtn);
+        echo json_encode($speech);
+        exit;
         exit;
         if ($_FILES["file"]["error"] > 0){
             echo json_encode(['code' => -1, 'data' => '', 'msg' => $_FILES["file"]["error"]]);
@@ -54,11 +76,29 @@ class TestController extends Controller
         exit;
     }
     public function actionIndex(){
-        SpeechInfo::splitWord(2);
-        exit();
+       
+        /**$conn=Yii::$app->db;
+        $sql='select id,product_name,product_cover,product_feature,buzzword from t_mac_product';
+        $product=$conn->createCommand($sql)->queryAll();
+        if($product){
+            foreach ($product as $p){
+                $pa = new Product();
+                $pa->primaryKey=$p['id'];
+                $pa->setAttributes([
+                    'id'=>$p['id'],
+                    'product_name' => $p['product_name'],
+                    'cover'=>$p['product_cover'],
+                    'feature'=>$p['product_feature'],
+                    'buzzword'=>$p['buzzword']
+                ], false);
+                $pa->save(false);
+            }
+        }
+       exit;
+        
         echo '<pre>';
         $query = [
-            'multi_match' => ['query'=>'护法',"fields"=>["name"]]
+            'multi_match' => ['query'=>'男女老幼',"fields"=>['product_name',"feature",'buzzword']]
         ];
         
         $highlight = [
@@ -66,9 +106,9 @@ class TestController extends Controller
             'post_tags' => '</em>',
             'fields' => ['keyword'=>new \stdClass()]
         ];
-        $customer = \common\models\elastic\EsStore::find()->query($query)->highlight($highlight)->asArray()->all();
+        $customer = Product::find()->query($query)->highlight($highlight)->asArray()->all();
         print_r($customer);
-        exit;
+        exit;*/
         /**
          *$tree=Category::loadCategoryTree();
        print_r($tree);
@@ -88,6 +128,22 @@ class TestController extends Controller
         return $this->render('index');
     }
     public function actionA(){
+        
+        $query = [
+            'multi_match' => ['query'=>'1994',
+                "fields"=>['product_name',"feature",'buzzword']
+            ]
+        ];
+        
+        $highlight = [
+            'pre_tags' => '<em>',
+            'post_tags' => '</em>',
+            'fields' => ['keyword'=>new \stdClass()]
+        ];
+        $customer = Product::find()->query($query)
+        ->highlight($highlight)->asArray()->all();
+        print_r($customer);
+        exit;
         $file=Yii::getAlias('@data-file/uploads/speech') .'/123.wav';
         $content='小优您好我要找粉红色的外套和黑色的长裤子';
         $res=SpeechService::baiduSynthesis(['0'=>$content], $file,['tex'=>$content,'spd'=>'3']);
