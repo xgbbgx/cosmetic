@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use common\helpers\UtilHelper;
 use yii\helpers\Html;
 use common\services\SpliteService;
+use common\models\tag\ProductParticiple;
 
 /**
  * TagController implements the CRUD actions for BaseTag model.
@@ -36,12 +37,12 @@ class TagController extends Controller
      * Lists all BaseTag models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionParticipleList()
     {
-        return $this->render('index');
+        return $this->render('participle_list');
     }
     
-    public function actionList(){
+    public function actionGetParticipleList(){
         $sEcho= empty($_GET['sEcho']) ? 0:intval($_GET['sEcho']);
         $colums=array("id","name","weight",'noun');
         $arr=UtilHelper::getDataTablesParams($_GET,$colums);
@@ -60,7 +61,7 @@ class TagController extends Controller
                 $arr['sWhere'] .=' and type='.$type;
             }
         }
-        $iData=BaseTag::search($arr);
+        $iData=ProductParticiple::search($arr);
         $totalNum=empty($iData['totalNum']) ?0:$iData['totalNum'];
         $output['iTotalRecords']=$totalNum;
         $output['iTotalDisplayRecords']=$totalNum;
@@ -70,9 +71,9 @@ class TagController extends Controller
             foreach($iList as $k=>$i){
                 $id=$i['id'];
                 $action='
-                <a  href="/tag/view?id='.$id.'"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp;
-                <a  href="/tag/update?id='.$id.'"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;
-                <a href="/tag/delete?id='.$id.'" title="删除" aria-label="删除" data-pjax="0" data-confirm="您确定要删除此项吗？" data-method="post">
+                <a  href="/tag/participle-view?id='.$id.'"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp;
+                <a  href="/tag/participle-update?id='.$id.'"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;
+                <a href="/tag/participle-delete?id='.$id.'" title="删除" aria-label="删除" data-pjax="0" data-confirm="您确定要删除此项吗？" data-method="post">
                 <i class="glyphicon glyphicon-trash"></i></a>';
                 $aaData=array($id,
                     Html::encode($i['name']),
@@ -93,9 +94,9 @@ class TagController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionParticipleView($id)
     {
-        return $this->render('view', [
+        return $this->render('participle_view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -107,13 +108,13 @@ class TagController extends Controller
      */
     public function actionCreate()
     {
-        $model = new BaseTag();
+        $model = new ProductParticiple();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('create', [
+        return $this->render('participle_create', [
             'model' => $model,
         ]);
     }
@@ -125,15 +126,15 @@ class TagController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionParticipleUpdate($id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['participle_view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
+        return $this->render('participle_update', [
             'model' => $model,
         ]);
     }
@@ -145,7 +146,7 @@ class TagController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionParticipleDelete($id)
     {
         $model=$this->findModel($id);
         $model->datafix=$model::DATAFIX_DELETE;
@@ -162,7 +163,7 @@ class TagController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = BaseTag::findOne($id)) !== null) {
+        if (($model = ProductParticiple::findOne($id)) !== null) {
             return $model;
         }
 
@@ -172,7 +173,7 @@ class TagController extends Controller
         $fileTxt=dirname(__FILE__).'/../../common/services/phpanalysis/dict/not-build/base_dic_new.txt';
         $myfile = fopen($fileTxt, "w");
         if($myfile){
-            $baseTag=BaseTag::getAll('name,weight,noun', ['datafix'=>BaseTag::DATAFIX]);
+            $baseTag=ProductParticiple::getAll('name,weight,noun', ['datafix'=>ProductParticiple::DATAFIX]);
             if($baseTag){
                 foreach ($baseTag as $tag){
                     $txt=$tag['name'].','.$tag['weight'].','.$tag['noun']."\n";

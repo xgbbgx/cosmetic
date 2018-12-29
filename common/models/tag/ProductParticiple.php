@@ -18,14 +18,14 @@ use Yii;
  * @property int $datafix 0正常1删除
  * @property int $type 11基本词典12补充词典13未归类的双字词14mmseg的差异词典条15新增词条 101为自定义词典
  */
-class BaseTag extends \common\core\common\ActiveRecord
+class ProductParticiple extends \common\core\common\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%base_tag}}';
+        return '{{%product_participle}}';
     }
 
     /**

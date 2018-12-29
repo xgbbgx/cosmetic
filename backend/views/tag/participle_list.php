@@ -66,7 +66,7 @@ $('#jq_datatable_list').dataTable( {
 	"bProcessing": true,
 	"bServerSide": true,
 	"aaSorting": [[ 1, "asc" ]],
-	"sAjaxSource": "/tag/list",
+	"sAjaxSource": "/tag/get-participle-list",
 	"oLanguage": {
 		"sUrl": "/js/jquery/cn.txt"
 	},
