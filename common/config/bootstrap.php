@@ -4,4 +4,6 @@ Yii::setAlias('@frontend', dirname(dirname(__DIR__)) . '/frontend');
 Yii::setAlias('@backend', dirname(dirname(__DIR__)) . '/backend');
 Yii::setAlias('@console', dirname(dirname(__DIR__)) . '/console');
 
+Yii::setAlias('@api', dirname(dirname(__DIR__)) . '/api');
+
 Yii::setAlias('@data-file', dirname(dirname(__DIR__)) . '/../../my-data/cosmetic');

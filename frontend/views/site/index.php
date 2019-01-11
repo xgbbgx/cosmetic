@@ -9,9 +9,7 @@ $this->title = 'My Yii Application';
 $params=[
     'token'=>'jjjdjkdjaaaaaafdfsajfkl',
     'state'=>'fjajkfkdjaall',
-    'client_id'=>'1000001',
-    'redirect_url'=>'http://f.cosmetic.com/'
-];
+    'client_id'=>'1000001'];
 $params['sign_msg']=SignHelper::getSignMsg($params,'a3bashsjddd');
 $url='http://f.ssocks.com/oauth/authorize?'.http_build_query($params);
 ?>

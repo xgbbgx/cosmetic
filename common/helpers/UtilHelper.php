@@ -11,7 +11,7 @@ class UtilHelper{
     /**
      * 返回错误码
      */
-    public static function rtnError($errorCode="10001",$msg='',$callback=null,$pos=null){
+    public static function rtnError($errorCode="10001",$msg='',$audio=null,$callback=null,$pos=null){
         if(!empty($msg)){
             $errorMsg=$msg;
         }else if(!empty(Yii::t('error',$errorCode))){
@@ -20,7 +20,7 @@ class UtilHelper{
             $errorCode='10001';
             $errorMsg=Yii::t('error',$errorCode);
         }
-        $return = array("code"=>$errorCode,"msg"=>$errorMsg,"pos"=>$pos);
+        $return = array("code"=>$errorCode,"msg"=>$errorMsg,"audio"=>null,"pos"=>$pos);
         echo (empty($callback) ?json_encode($return) : $callback."(".(json_encode($return)).")");
         exit;
     }
@@ -28,7 +28,7 @@ class UtilHelper{
     /**
      * componts return 错误
      */
-    public static function rtnCode($errorCode="10001",$msg=''){
+    public static function rtnCode($errorCode="10001",$msg='',$audio=null){
         if(!empty($msg)){
             $errorMsg=$msg;
         }else if(!empty(Yii::t('error',$errorCode))){
@@ -37,7 +37,7 @@ class UtilHelper{
             $errorCode='10001';
             $errorMsg=Yii::t('error',$errorCode);
         }
-        $return = array("code"=>$errorCode,"msg"=>$errorMsg);
+        $return = array("code"=>$errorCode,"msg"=>$errorMsg,"audio"=>null);
         return $return;
     }
     public static function rtnCommonCode($errorCode="10001",$msg=''){
