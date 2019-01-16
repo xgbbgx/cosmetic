@@ -33,7 +33,7 @@ class Controller extends BaseController
             "msg" => $msg,
             "data" => $data,
             "time" => time()
-        ]);
+        ],JSON_UNESCAPED_UNICODE);
         return $jsonResult;
     }
 }

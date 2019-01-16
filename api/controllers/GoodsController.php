@@ -37,6 +37,15 @@ class GoodsController extends Controller
         ];
         $customer = Product::find()->query($query)
         ->highlight($highlight)->asArray()->all();
-        return $this->renderJSON($customer);
+        if($customer){
+            print_r($customer);
+            exit;
+            foreach ($customer as $c){
+                if(isset($c['_source']) && $c['_source']){
+                    $data[]=$c['_source'];
+                }
+            }
+        }
+        return $this->renderJSON($data);
     }
 }
