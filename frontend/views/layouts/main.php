@@ -14,9 +14,9 @@
 
 <!-- stylesheet -->
 <link href="css/bootstrap.css?v=123" rel="stylesheet" type="text/css" media="all" />
-<!-- Chocolat-CSS --> <link rel="stylesheet" href="css/chocolat.css"	  type="text/css" media="all">
+<!-- Chocolat-CSS --> <link rel="stylesheet" href="css/chocolat.css?v=123"	  type="text/css" media="all">
 <!-- animation --><link href="css/animate.css?v=123" rel="stylesheet" type="text/css" media="all">
-<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/style.css?v=123" rel="stylesheet" type="text/css" media="all" />
 <!-- //stylesheet -->
 <!-- online fonts -->
 <link href="http://fonts.googleapis.com/css?family=Cormorant+Unicase:300,400,500,600,700&subset=cyrillic,latin-ext,vietnamese" rel="stylesheet">

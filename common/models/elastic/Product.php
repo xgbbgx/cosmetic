@@ -10,6 +10,6 @@ class Product extends ActiveRecord {
      */
     public function attributes() {
         // path mapping for '_id' is setup to field 'id'
-        return ['id', 'product_name','cover','feature','buzzword'];
+        return ['id', 'product_name','cover','images','feature','buzzword'];
     }
 }

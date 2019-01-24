@@ -178,15 +178,14 @@
 			<section class="grid3d vertical" id="grid3d">
 				<div class="grid-wrap">
 					<div class="grid">
-						<figure class="col-md-4 effect-zoe"><img src="images/g1.jpg" alt="Odyssey"><figcaption><h4>CROPS</h4></figcaption></figure>
-						<figure class="col-md-4 effect-zoe"><img src="images/g7.jpg" alt="Odyssey"><figcaption><h4>PLOUGH</h4></figcaption></figure>
-						<figure class="col-md-4 effect-zoe"><img src="images/g3.jpg" alt="Odyssey"><figcaption><h4>LIVESTOCK</h4></figcaption></figure>
-						<figure class="col-md-4 effect-zoe"><img src="images/g4.jpg" alt="Odyssey"><figcaption><h4>FARMING</h4></figcaption></figure>
-						<figure class="col-md-4 effect-zoe"><img src="images/g5.jpg" alt="Odyssey"><figcaption><h4>GRAINS</h4></figcaption></figure>
-						<figure class="col-md-4 effect-zoe"><img src="images/g1.jpg" alt="Odyssey"><figcaption><h4>RAISING</h4></figcaption></figure>
-						<figure class="col-md-4 effect-zoe"><img src="images/g2.jpg" alt="Odyssey"><figcaption><h4>PADDY</h4></figcaption></figure>
-						<figure class="col-md-4 effect-zoe"><img src="images/g7.jpg" alt="Odyssey"><figcaption><h4>CROPS</h4></figcaption></figure>
-						<figure class="col-md-4 effect-zoe"><img src="images/g6.jpg" alt="Odyssey"><figcaption><h4>GRAINS</h4></figcaption></figure>
+					<?php 
+					foreach ($product as $p){
+					?>
+					<figure class="col-md-4 effect-zoe">
+						<img src="<?php echo $p['cover'];?>" alt="<?php echo $p['product_name'];?>">
+						<figcaption><h4><?php echo $p['product_name'];?></h4></figcaption>
+					</figure>
+					<?php } ?>
 					</div>
 				</div>
 				<div class="content">

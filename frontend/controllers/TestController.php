@@ -76,7 +76,25 @@ class TestController extends Controller
         exit;
     }
     public function actionIndex(){
-       
+        $conn=Yii::$app->db_spider;
+        $sql='select id,product_name,product_cover,product_feature,buzzword from t_lancome';
+        $product=$conn->createCommand($sql)->queryAll();
+        if($product){
+            foreach ($product as $p){
+                $pa = new Product();
+                $coverArr=empty($p['product_cover'])?[]:json_decode($p['product_cover'],true);
+                $pa->primaryKey='lancome_'.$p['id'];
+                $pa->setAttributes([
+                    'id'=>$p['id'],
+                    'product_name' => $p['product_name'],
+                    'cover'=>empty($coverArr[0]) ?'':$coverArr[0],
+                    'images'=>$p['product_cover'],
+                    'feature'=>$p['product_feature'],
+                    'buzzword'=>$p['buzzword']
+                ], false);
+                $pa->save(false);
+            }
+        }
         /**$conn=Yii::$app->db;
         $sql='select id,product_name,product_cover,product_feature,buzzword from t_mac_product';
         $product=$conn->createCommand($sql)->queryAll();
