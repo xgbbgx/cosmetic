@@ -22,23 +22,4 @@ class PublicController extends \common\core\frontend\Controller
         $data['signPackage']=$signPackage;
         return $this->renderAjax('wx_share',$data);
     }
-    public function actionStorybook(){
-        $data=[];
-        $blurbArr=Blurb::loadBlurbByDomainAndPage(1,3);
-        if($blurbArr){
-            $blurb=[];
-            foreach ($blurbArr as $b){
-                $blurb[$b['id']]=$b['name'];
-            }
-            $data['blurb']=$blurb;
-        }
-        if(Yii::$app->request->get('blurb')=='true'){
-            $data['isBlurb']=true;
-        }
-        return $this->render('storybook',$data);
-    }
-    
-    public function actionQrcode(){
-        
-    }
 }

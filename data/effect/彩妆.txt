@@ -1,0 +1,32 @@
+彩妆,3,cosmetics
+遮瑕膏,3,concealer
+修容饼,3,shading powder
+粉底,3,foundation (compact,stick)
+粉饼,3,pressed powder
+散粉,3,loose powder
+闪粉,3,shimmering powder/glitter
+眉粉,3,brow powder
+眉笔,3,brow pencil
+眼线液（眼线笔）,3,liquid eye liner, eye liner
+眼影,3,eye shadow
+睫毛膏,3,mascara
+唇线笔,3,lip liner
+唇膏,3,lip color/lipstick（笔状 lip pencil，膏状 lip lipstick，盒装 lip color/lip gloss）
+唇彩,3,lip gloss/lip color
+腮红,3,blush
+卸装水,3,makeup remover
+卸装乳,3,makeup removing lotion
+帖在身上的小亮片,3,art
+指甲,3,manicure/pedicure
+指甲油,3,nail polish/color/enamel
+去甲油,3,nail polish remover
+护甲液,3,nail saver
+发,3,hair products/accessories
+洗发水,3,shampoo
+护发素,3,hair conditioner
+锔油膏,3,conditioning hairdressing/hairdressing gel /treatment
+摩丝,3,mousse
+发胶,3,styling gel
+染发,3,hair color
+冷烫水,3,perm/perming formula
+卷发器,3,rollers/perm rollers

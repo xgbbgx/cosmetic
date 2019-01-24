@@ -1,0 +1,17 @@
+工具,4,cosmetic applicators/accessories
+粉刷,4,cosmetic brush, face brush
+粉扑,4,powder puffs
+海绵扑,4,sponge puffs
+眉刷,4,brow brush
+睫毛夹,4,lash curler
+眼影刷,4,eye shadow brush/shadow applicator
+口红刷,4,lip brush
+胭脂扫,4,blush brush
+转笔刀,4,pencil sharpener
+电动剃毛器,4,electric shaver-for women
+电动睫毛卷,4,electric lash curler
+描眉卡,4,brow template
+纸巾,4,facial tissue
+吸油纸,4,oil-absorbing sheets
+化装棉,4,cotton pads
+棉签,4,q-tips

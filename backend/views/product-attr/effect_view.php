@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('创建产品功效', ['effect-create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -32,6 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'name_en',
             'name_py',
+            'type',
+            'info',
+            'info_en',
             'created_by',
             [
                 'attribute' => 'created_at',

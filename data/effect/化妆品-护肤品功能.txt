@@ -1,0 +1,37 @@
+acne/spot,2,青春痘用品
+active,2,赋活用
+after sun,2,日晒后用品
+alcohol-free,2,无酒精
+anti-,2,抗、防
+anti-wrinkle,2,抗老防皱
+balancing,2,平衡酸硷
+clean-/purify-,2,清洁用
+combination,2,混合性皮肤
+dry,2,干性皮肤
+essence,2,精华液
+facial,2,脸部用
+fast/quick dry,2,快干
+firm,2,紧肤
+foam,2,泡沫
+gentle,2,温和的
+hydra-,2,保湿用
+long lasting,2,持久性
+milk,2,乳
+mult-,2,多元
+normal,2,中性皮肤
+nutritious,2,滋养
+oil-control,2,抑制油脂
+oily,2,油性皮肤
+pack,2,剥撕式面膜
+peeling,2,敷面剥落式面膜
+remover,2,去除、卸妆
+repair,2,修复
+revitalite,2,活化
+scrub,2,磨砂式(去角质)
+sensitive,2,敏感性皮肤
+solvent,2,溶解
+sun block,2,防晒用
+toning lotion,2,化妆水
+trentment,2,修护
+wash,2,洗
+waterproof,2,防水
