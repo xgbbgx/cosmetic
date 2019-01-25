@@ -6,6 +6,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\elastic\Product;
+use common\services\SphinxClient;
 
 /**
  * Site controller
@@ -59,7 +60,7 @@ class SiteController extends Controller
     {
         $data=[];
         $product=[];
-        $query = [
+       /** $query = [
             'match_phrase' => [
                 'product_name' =>[
                     'query'=>'兰蔻',
@@ -81,7 +82,7 @@ class SiteController extends Controller
                     }
                 }
             }
-        }
+        }*/
         $data['product']=$product;
         return $this->render('index',$data);
     }

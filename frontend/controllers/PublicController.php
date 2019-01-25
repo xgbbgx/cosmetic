@@ -4,7 +4,6 @@ namespace frontend\controllers;
 use Yii;
 use common\helpers\FileHelper;
 use common\services\WxsdkService;
-use common\models\Blurb;
 
 class PublicController extends \common\core\frontend\Controller
 {

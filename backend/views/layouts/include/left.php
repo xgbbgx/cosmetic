@@ -44,7 +44,7 @@ use mdm\admin\components\MenuHelper;
   ?>
 		<li class="<?php echo $if_menu==1?'active':''; ?>">
 			<a href="javascript:;">
-			<i class="icon-sitemap"></i> 
+			 <i class="icon-cogs"></i>
 			<span class="title"><?=$p_menu['label']?></span>
 			<span class="<?php echo $if_menu==1?'selected':''; ?>"></span>
 			<span class="arrow  <?php echo $if_menu==1?'open':''; ?>"></span>
