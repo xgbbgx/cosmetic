@@ -15,6 +15,7 @@ use common\models\speech\SpeechFlow;
 use app\models\EsStore;
 use common\services\SpliteService;
 use common\models\elastic\Product;
+use common\services\ParticipleService;
 /**
  * Site controller
  */
@@ -26,7 +27,13 @@ class TestController extends Controller
     }
     public function TestController(){
         //$fileDir=Yii::getAlias('@data-file/uploads/speech') ;
-        
+       
+    }
+    public function actionTest(){
+        $content='在许多时候,我们需要获取数据库中所有的表,比如常见的代码生成,脚手架之类的,
+查询所有字段,是指查询表中的所有字段的数据,两种方式,查询';
+        $rtn=ParticipleService::ppl($content);
+        print_r($rtn);
     }
     public function actionUpload(){
         $speech=[];

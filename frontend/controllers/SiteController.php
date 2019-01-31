@@ -6,7 +6,6 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\elastic\Product;
-use common\services\SphinxClient;
 
 /**
  * Site controller

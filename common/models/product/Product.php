@@ -69,4 +69,8 @@ class Product extends \common\core\common\ActiveRecord
             'datafix' => 'Datafix',
         ];
     }
+    
+    public static function getColumn($table){
+        return self::findBySql('show full columns from '.$table)->asArray()->column();
+    }
 }
