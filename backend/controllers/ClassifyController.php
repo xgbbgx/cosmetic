@@ -78,7 +78,31 @@ class ClassifyController extends Controller
         echo json_encode($output);
         exit;
     }
-    
+    public function actionBrandSearchName(){
+        $sSearch=Yii::$app->request->get('sSearch');
+        if(!is_string($sSearch)){
+            return null;
+        }
+        $limit=Yii::$app->request->get('page');
+        if(is_numeric($limit)){
+            $limit=intval($limit);
+        }else{
+            $limit=20;
+        }
+        $search=Brand::loadSearchNameByNameLike($sSearch,$limit);
+        echo json_encode($search);
+        exit;
+    }
+    public function actionBrandSearchId(){
+        $id=Yii::$app->request->get('id');
+        if(!is_string($id)){
+            return null;
+        }
+        $book=[];
+        $book=Brand::loadBrandById($id);
+        echo json_encode($book);
+        exit;
+    }
     /**
      * Displays a single Brand model.
      * @param integer $id
@@ -229,6 +253,33 @@ class ClassifyController extends Controller
         $model->save();
         return $this->redirect(['/classify/category-list']);
     }
+    
+    public function actionCategorySearchName(){
+        $sSearch=Yii::$app->request->get('sSearch');
+        if(!is_string($sSearch)){
+            return null;
+        }
+        $limit=Yii::$app->request->get('page');
+        if(is_numeric($limit)){
+            $limit=intval($limit);
+        }else{
+            $limit=20;
+        }
+        $search=Category::loadSearchNameByNameLike($sSearch,$limit);
+        echo json_encode($search);
+        exit;
+    }
+    public function actionCategorySearchId(){
+        $id=Yii::$app->request->get('id');
+        if(!is_string($id)){
+            return null;
+        }
+        $book=[];
+        $book=Category::loadCategoryById($id);
+        echo json_encode($book);
+        exit;
+    }
+    
     /**
      * Function output the site that you selected.
      * @param int $pid

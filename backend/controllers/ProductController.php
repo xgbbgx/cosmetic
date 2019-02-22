@@ -3,11 +3,12 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\product\Product;
-use yii\data\ActiveDataProvider;
 use common\core\backend\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\helpers\UtilHelper;
+use common\models\category\Category;
+use common\models\category\Brand;
+use yii\web\NotFoundHttpException;
 
 class ProductController extends Controller
 {
@@ -24,55 +25,62 @@ class ProductController extends Controller
     }
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Product::find(),
-        ]);
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->render('index');
     }
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+    public function actionProductList(){
+        return $this->render('product_list');
     }
-    public function actionCreate()
-    {
-        $model = new Product();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+    public function actionGetProductList(){
+        $sEcho= empty($_GET['sEcho']) ? 0:intval($_GET['sEcho']);
+        $colums=array("id");
+        $arr=UtilHelper::getDataTablesParams($_GET,$colums);
+        $output = array(
+            "sEcho" => $sEcho,
+            "iTotalRecords" => 1,
+            "iTotalDisplayRecords" => 1,
+            "aaData" => array()
+        );
+        
+        echo json_encode($output);
+        exit;
     }
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+    public function actionSelect(){
+        $data=[];
+        $category0=Category::loadCategoryListByParentId(0);
+        $data['category0']=$category0;
+        return $this->render('product_select',$data);
     }
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+    public function actionGetSelect($pid,$d){
+        $data=[];
+        $category=Category::loadCategoryListByParentId($pid);
+        $data['pid']=$pid;
+        $data['d']=$d;
+        $data['category']=$category;
+        return $this->renderAjax('p_select',$data);
     }
-    protected function findModel($id)
-    {
-        if (($model = Product::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
+    public function actionView(){
+       $data=[];
+       $request=Yii::$app->request;
+       $bid=$request->get('bid');
+       if($bid){
+           $brand=Brand::loadBrandById($bid);
+           $data['brand']=$brand;
+       }
+       if(empty($brand)){
+           throw new NotFoundHttpException(Yii::t('error','20301'));
+       }
+       $cid=$request->get('cid');
+       if($cid){
+           $category=Category::loadCategoryById($bid);
+           $data['category']=$category;
+       }
+       if(empty($category)){
+           throw new NotFoundHttpException(Yii::t('error','20302'));
+       }
+       $id=$request->get('id');
+       //
+       
+       
+       return $this->render('product_view',$data);
     }
 }

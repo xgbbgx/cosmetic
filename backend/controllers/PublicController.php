@@ -17,4 +17,12 @@ class PublicController extends Controller
         echo  FileHelper::getInstance()->file('/'.$fileName);
         exit;
     }
+    public function actionMedia()
+    {
+        return $this->render('media');
+    }
+    public function actionElfinder()
+    {
+        return $this->renderAjax('elfinder');
+    }
 }

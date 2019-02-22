@@ -82,4 +82,17 @@ class Brand extends \common\core\common\ActiveRecord
         $data['totalNum']=empty($totalNum) ?0:$totalNum;
        return $data;
     }
+    public static function loadBrandById($id){
+        return self::getOne('id,name,name_en,name_py ',['id'=>$id]);
+    }
+    public static function loadSearchNameByNameLike($name,$limit=10){
+        return self::find()->select(['id','name','name_en','name_py'])->where([
+            'datafix'=>self::DATAFIX,
+        ])->andwhere([
+            'or',
+            ['like','name',$name.'%',false],
+            ['like','name_en',$name.'%',false],
+            ['like','name_py',$name.'%',false],
+        ])->orderBy(['name'=>SORT_ASC])->limit($limit)->asArray()->all();
+    }
 }

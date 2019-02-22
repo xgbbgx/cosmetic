@@ -159,4 +159,23 @@ left join t_category t4 on t3.cid2=t4.parent_id and t4.datafix=0
         $model = self::findAll(array('parent_id'=>$pid));
         return ArrayHelper::map($model, 'id', 'name');
     }
+    
+    public static function loadCategoryById($id){
+        return self::getOne('id,name,name_en,name_py ',['id'=>$id]);
+    }
+    public static function loadSearchNameByNameLike($name,$limit=10){
+        return self::find()->select(['id','name','name_en','name_py'])->where([
+            'datafix'=>self::DATAFIX,
+        ])->andwhere([
+            'or',
+            ['like','name',$name.'%',false],
+            ['like','name_en',$name.'%',false],
+            ['like','name_py',$name.'%',false],
+        ])->orderBy(['name'=>SORT_ASC])->limit($limit)->asArray()->all();
+    }
+
+    public static function loadCategoryListByParentId($pid)
+    {
+        return self::getAll('id,name,name_en,name_py',['parent_id'=>$pid]);
+    }
 }

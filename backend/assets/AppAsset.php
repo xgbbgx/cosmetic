@@ -28,7 +28,7 @@ class AppAsset extends AssetBundle
         'js/jquery/jquery.dataTables.min.js',
         'js/metronic/app.js',
         'js/wdialog/wdialog.js',
-        'js/public.js'
+        'js/public.js?v=123'
     ];
     public $jsOptions = [
         'position' => \yii\web\View::POS_HEAD

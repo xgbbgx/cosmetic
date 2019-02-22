@@ -30,7 +30,7 @@ $opts = array(
 	'roots' => array(
 		array(
 			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'          => '../../../../../../my-data/reading-mile/uploads/rm_media/',         // path to files (REQUIRED)
+			'path'          => '../../../../../../my-data/cosmetic/uploads/media/',         // path to files (REQUIRED)
 		    'URL'           => '/uploads/rm_media/',//dirname($_SERVER['PHP_SELF']) . '/../../upload/', // URL to files (REQUIRED)
 			'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)
 			'attributes' => array(
