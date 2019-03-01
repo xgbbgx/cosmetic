@@ -42,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-confirm' => Yii::t('yii', '确定删除吗?'),
                             'data-method' => 'post',
                             'data-pjax' => '0',
+                            'style'=>"margin-left:20px;"
                         ];
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
                     },

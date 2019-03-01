@@ -13,6 +13,7 @@ use common\models\category\Category;
 use common\models\classify\Classify;
 use yii\data\ActiveDataProvider;
 use common\models\classify\ClassifyAttr;
+use common\models\classify\ClassifyAttrVal;
 
 /**
  * ClassifyController implements the CRUD actions for Brand model.
@@ -335,6 +336,26 @@ class ClassifyController extends Controller
         $model->save();
         return $this->redirect(['classify-list']);
     }
+    public function actionClassifySearchName(){
+        $sSearch=Yii::$app->request->get('sSearch');
+        if(!is_string($sSearch)){
+            return null;
+        }
+        $limit=20;
+        $search=Classify::loadSearchNameByNameLike($sSearch,$limit);
+        echo json_encode($search);
+        exit;
+    }
+    public function actionClassifySearchId(){
+        $id=Yii::$app->request->get('id');
+        if(!is_string($id)){
+            return null;
+        }
+        $search=[];
+        $search=Classify::loadClassifyById($id);
+        echo json_encode($search);
+        exit;
+    }
     public function actionClassifyAttrView(){
         $request=Yii::$app->request;
         $id=$request->get('id');
@@ -366,5 +387,57 @@ class ClassifyController extends Controller
         $model->datafix=$model::DATAFIX_DELETE;
         $model->save();
         return $this->redirect(['classify-attr-list']);
+    }
+    public function actionClassifyAttrSearchName(){
+        $sSearch=Yii::$app->request->get('sSearch');
+        if(!is_string($sSearch)){
+            return null;
+        }
+        $limit=20;
+        $search=ClassifyAttr::loadSearchNameByNameLike($sSearch,$limit);
+        echo json_encode($search);
+        exit;
+    }
+    public function actionClassifyAttrSearchId(){
+        $id=Yii::$app->request->get('id');
+        if(!is_string($id)){
+            return null;
+        }
+        $search=[];
+        $search=ClassifyAttr::loadClassifyAttrById($id);
+        echo json_encode($search);
+        exit;
+    }
+    public function actionClassifyAttrValView(){
+        $request=Yii::$app->request;
+        $id=$request->get('id');
+        if($id){
+            $model=ClassifyAttrVal::findOne($id);
+        }
+        if(empty($model)){
+            $model = new ClassifyAttrVal();
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['classify-attr-val-view', 'id' => $model->id]);
+        }
+        return $this->render('classify_attr_val', [
+            'model' => $model,
+        ]);
+    }
+    public function actionClassifyAttrValList()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => ClassifyAttrVal::find()->where(['datafix'=>Classify::DATAFIX]),
+        ]);
+        return $this->render('classify_attr_val_list', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    public function actionClassifyAttrValDelete($id)
+    {
+        $model=ClassifyAttrVal::findOne($id);
+        $model->datafix=$model::DATAFIX_DELETE;
+        $model->save();
+        return $this->redirect(['classify-attr-val-list']);
     }
 }

@@ -22,15 +22,24 @@ $this->params['breadcrumbs'][] = $this->title;
             'name_en',
             'name_py',
             'classify_id',
-            'is_sale',
-            'edit_type',
+            ['attribute' => 'is_sale', 
+                'value' => function($model) {
+                    return $model->is_sale == 1 ? "是" : "否";
+                }
+            ],
+            ['attribute' => 'edit_type',
+              'format' => 'html',
+              'value' =>  function ($model, $key, $index, $column){
+                    $editConf=Yii::$app->params['classify_conf']['edit_type'];
+                return  empty($editConf[$model->edit_type]) ?'':$editConf[$model->edit_type];
+             }],  
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{classify-view}  {classify-delete}',
+                'template' => '{classify-attr-view}{classify-attr-delete}',
                 'buttons' => [
                     // 下面代码来自于 yii\grid\ActionColumn 简单修改了下
-                    'classify-view' => function ($url, $model, $key) {
+                    'classify-attr-view' => function ($url, $model, $key) {
                         $options = [
                             'title' => Yii::t('yii', 'View'),
                             'aria-label' => Yii::t('yii', 'View'),
@@ -38,13 +47,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         ];
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, $options);
                     },
-                    'classify-delete' => function ($url, $model, $key) {
+                    'classify-attr-delete' => function ($url, $model, $key) {
                         $options = [
                             'title' => Yii::t('yii', 'Delete'),
                             'aria-label' => Yii::t('yii', 'Delete'),
                             'data-confirm' => Yii::t('yii', '确定删除吗?'),
                             'data-method' => 'post',
                             'data-pjax' => '0',
+                            'style'=>"margin-left:20px;"
                         ];
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
                     },

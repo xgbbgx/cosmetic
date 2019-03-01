@@ -42,10 +42,10 @@ class ClassifyAttrVal extends \common\core\common\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'name_en' => 'Name En',
-            'name_py' => 'Name Py',
-            'classify_attr_id' => 'Classify Attr ID',
+            'name' => '属性名称值',
+            'name_en' => '属性值英文',
+            'name_py' => '属性值拼音',
+            'classify_attr_id' => '分类属性ID',
             'datafix' => 'Datafix',
         ];
     }

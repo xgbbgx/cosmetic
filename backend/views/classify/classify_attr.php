@@ -1,6 +1,8 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use backend\assets\UniformAsset;
+UniformAsset::register($this);
 
 if($model->name){
 	$this->title = '分类属性: ' . $model->name;
@@ -33,13 +35,9 @@ if($model->name){
                 ],
                 'options' => ['class' => 'form-horizontal','id'=>'form1','enctype'=>"multipart/form-data"],
                 ]);
-                if($model->is_sale){
-                    $model->is_sale=1;
-                }else{
-                    $model->is_sale=0;
-                }
+            $model->is_sale=($model->is_sale)?1:0
             ?>
-        	<?= $form->field($model, 'classify_id')->textInput(['maxlength' => true]) ?>
+        	<?= $form->field($model, 'classify_id')->textInput(['maxlength' => true,'class'=>'select2_category','style'=>'width:230px;']) ?>
         	
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         
@@ -60,3 +58,8 @@ if($model->name){
         </div>
 	</div>
 </div>
+<script>
+	jQuery(document).ready(function() {
+	   load_select2($("#classifyattr-classify_id"),'/classify/classify-search-name','/classify/classify-search-id');
+	})
+</script>
