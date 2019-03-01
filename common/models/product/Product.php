@@ -69,7 +69,27 @@ class Product extends \common\core\common\ActiveRecord
             'datafix' => 'Datafix',
         ];
     }
-    
+    public static function loadProductNumByArr($arr){
+        $where = '';
+        if(isset($arr['sWhere']) && $arr['sWhere']){
+            $where=$arr['sWhere'].' and datafix= '.self::DATAFIX;
+        }else{
+            $where=' where datafix= '.self::DATAFIX;
+        }
+        return self::findBySql('select count(*) from '.self::tableName().' '.$where)->scalar();
+    }
+    public static function loadloadProductByArr($arr){
+        $order=empty($arr['sOrder']) ? ' order by name ':$arr['sOrder'];
+        $where = '';
+        if(isset($arr['sWhere']) && $arr['sWhere']){
+            $where=$arr['sWhere'].' and datafix= '.self::DATAFIX;
+        }else{
+            $where=' where datafix= '.self::DATAFIX;
+        }
+        $sql='select id,name,name_en,name_py,brand_id,category_id from '.
+            self::tableName().' '.$where.' '.$order.' '.@$arr['sLimit'];
+            return self::findBySql($sql)->asArray()->all();
+    }
     public static function getColumn($table){
         return self::findBySql('show full columns from '.$table)->asArray()->column();
     }

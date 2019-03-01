@@ -64,4 +64,7 @@ class ProductEffect extends \common\core\common\ActiveRecord
             'datafix' => '标记',
         ];
     }
+    public static function loadAllProductEffect(){
+        return self::getAll('id,name', ['datafix'=>self::DATAFIX]);
+    }
 }

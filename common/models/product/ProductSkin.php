@@ -57,4 +57,7 @@ class ProductSkin extends \common\core\common\ActiveRecord
             'datafix' => '标记',
         ];
     }
+    public static function loadAllProductSkin(){
+        return self::getAll('id,name', ['datafix'=>self::DATAFIX]);
+    }
 }

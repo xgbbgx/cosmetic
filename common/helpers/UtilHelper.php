@@ -57,9 +57,10 @@ class UtilHelper{
      * @param unknown $model
      * @return string|mixed
      */
-    public static function getModelError($modelError) {
-        if(!is_array($modelError)) return '';
-        $firstError = array_shift($modelError);
+    public static function getModelError($model) {
+        $errors = $model->getErrors();    //得到所有的错误信息
+        if(!is_array($errors)) return '';
+        $firstError = array_shift($errors);
         if(!is_array($firstError)) return '';
         return array_shift($firstError);
     }

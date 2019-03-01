@@ -10,6 +10,9 @@ use common\core\backend\Controller;
 use common\helpers\UtilHelper;
 use yii\helpers\Html;
 use common\models\category\Category;
+use common\models\classify\Classify;
+use yii\data\ActiveDataProvider;
+use common\models\classify\ClassifyAttr;
 
 /**
  * ClassifyController implements the CRUD actions for Brand model.
@@ -299,5 +302,69 @@ class ClassifyController extends Controller
             if($id==$value){}else
             echo Html::tag('option',Html::encode($name),array('value'=>$value));
         }
+    }
+    public function actionClassifyView(){
+        $request=Yii::$app->request;
+        $id=$request->get('id');
+        if($id){
+            $model=Classify::findOne($id);
+        }
+        if(empty($model)){
+            $model = new Classify();
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['classify-view', 'id' => $model->id]);
+        }
+        return $this->render('classify', [
+            'model' => $model,
+        ]);
+    }
+    public function actionClassifyList()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Classify::find()->where(['datafix'=>Classify::DATAFIX]),
+        ]);
+        return $this->render('classify_list', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    public function actionClassifyDelete($id)
+    {
+        $model=Classify::findOne($id);
+        $model->datafix=$model::DATAFIX_DELETE;
+        $model->save();
+        return $this->redirect(['classify-list']);
+    }
+    public function actionClassifyAttrView(){
+        $request=Yii::$app->request;
+        $id=$request->get('id');
+        if($id){
+            $model=ClassifyAttr::findOne($id);
+        }
+        if(empty($model)){
+            $model = new ClassifyAttr();
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['classify-attr-view', 'id' => $model->id]);
+        }
+        return $this->render('classify_attr', [
+            'model' => $model,
+        ]);
+    }
+    public function actionClassifyAttrList()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => ClassifyAttr::find()->where(['datafix'=>Classify::DATAFIX]),
+        ]);
+        return $this->render('classify_attr_list', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    public function actionClassifyAttrDelete($id)
+    {
+        $model=ClassifyAttr::findOne($id);
+        $model->datafix=$model::DATAFIX_DELETE;
+        $model->save();
+        return $this->redirect(['classify-attr-list']);
     }
 }
