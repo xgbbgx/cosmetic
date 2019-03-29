@@ -33,7 +33,40 @@ class TestController extends Controller
         $content='在许多时候,我们需要获取数据库中所有的表,比如常见的代码生成,脚手架之类的,
 查询所有字段,是指查询表中的所有字段的数据,两种方式,查询';
         $rtn=ParticipleService::ppl($content);
-        print_r($rtn);
+        echo '<pre>';
+        //print_r(($rtn));
+        print_r(SpliteService::rtnTags($rtn));
+        /**
+         * 备注 ：FIND_IN_SET 
+         * 
+         * 查询 标签 和 同义词
+         * 
+         *   SELECT DISTINCT name FROM t_product_tag WHERE 
+        	(  FIND_IN_SET('大房子',synonym) OR name ='大房子'
+        		or
+        		 FIND_IN_SET('裤装',synonym) OR name ='裤装'
+        		 or
+        		 FIND_IN_SET('浅色系',synonym) OR name ='浅色系'
+        		 or
+        		 FIND_IN_SET('孕妇装',synonym) OR name ='孕妇装'
+        		 or
+        		 FIND_IN_SET('小尺码',synonym) OR name ='小尺码'
+        	)
+	
+         * 
+         * 查询互斥标签
+         * 
+         * 
+           SELECT * FROM t_product_tag_relation
+            where 
+            FIND_IN_SET(original_tag_name,'2件装,A字裙')  and
+            FIND_IN_SET(tag_name,'2件装,A字裙')
+         * 
+         * 
+         */
+        
+        
+        
     }
     public function actionUpload(){
         $speech=[];
@@ -83,7 +116,7 @@ class TestController extends Controller
         exit;
     }
     public function actionIndex(){
-        $conn=Yii::$app->db_spider;
+        /** $conn=Yii::$app->db_spider;
         $sql='select id,product_name,product_cover,product_feature,buzzword from t_lancome';
         $product=$conn->createCommand($sql)->queryAll();
         if($product){
@@ -102,7 +135,7 @@ class TestController extends Controller
                 $pa->save(false);
             }
         }
-        /**$conn=Yii::$app->db;
+        $conn=Yii::$app->db;
         $sql='select id,product_name,product_cover,product_feature,buzzword from t_mac_product';
         $product=$conn->createCommand($sql)->queryAll();
         if($product){

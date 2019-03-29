@@ -10,6 +10,8 @@ use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use common\helpers\UtilHelper;
 use common\components\SpeechInfo;
+use common\services\ParticipleService;
+use common\services\SpliteService;
 
 /**
  * SpeechController implements the CRUD actions for SpeechArc model.
@@ -72,7 +74,7 @@ class SpeechController extends Controller
                 <a  href="/speech/view?id='.$id.'"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;&nbsp;
                 <a href="/speech/delete?id='.$id.'" title="删除" aria-label="删除" data-pjax="0" data-confirm="您确定要删除此项吗？" data-method="post">
                 <i class="glyphicon glyphicon-trash"></i></a>';
-                $audio='<video style="height:50px;width:200px;" src="'.$i['dst_url'].'" controls="controls"  name="media"></video>';
+                $audio='';//'<video style="height:50px;width:200px;" src="'.$i['dst_url'].'" controls="controls"  name="media"></video>';
                 $statusStr='<i class="icon-remove"></i>';
                 if($i['status']=='1'){
                     $statusStr='<i class="icon-ok"></i>';
@@ -179,5 +181,18 @@ class SpeechController extends Controller
         SpeechInfo::splitWord($id);
         
         return $this->redirect(['view', 'id' =>$id]);
+    }
+    
+    public function actionSplitTest(){
+        $data=[];
+        if(Yii::$app->request->isPost){
+            $content=Yii::$app->request->post('content');
+            $data['content']=$content;
+            $rtn=ParticipleService::ppl($content);//分词
+            $data['splitWord']=$rtn;
+            //去燥
+            $data['exactWord']=SpliteService::rtnTags($rtn);
+        }
+        return $this->render('split_test',$data);
     }
 }
